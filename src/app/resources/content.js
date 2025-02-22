@@ -40,7 +40,7 @@ const social = [
   {
     name: "X",
     icon: "x",
-    link: "x.com/dkrdante",
+    link: "x.com/DkrDante",
   },
   {
     name: "Email",
