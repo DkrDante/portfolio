@@ -17,7 +17,7 @@ const newsletter = {
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
   description: (
     <>
-      Stay Ahead with AI & Tech!
+      Stay Ahead with <InlineCode>AI, Tech and CUBING!</InlineCode>
       Subscribe to my newsletter for insights on Machine Learning, the latest tech trends, and discoveries from my learning journey. Get fresh ideas straight to your inbox!
 
     </>
@@ -27,6 +27,7 @@ const newsletter = {
 const social = [
   // Links are automatically displayed.
   // Import new icons in /once-ui/icons.ts
+  //
   {
     name: "GitHub",
     icon: "github",
@@ -53,7 +54,7 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Design engineer and builder</>,
+  headline: <>Full Stack developer, ML model builder and Tech enthusiastic</>,
   subline: (
     <>
       I'm Yashvardhan, a Full Stack Developer, and worked at <InlineCode>ZVIA</InlineCode>, where I crafted intuitive
@@ -83,8 +84,8 @@ const about = {
     description: (
       <>
         Yashvardhan is a India-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        into simple, elegant design solutions. His work spans digital interfaces, interactive
+        experiences, and the convergence of simplicity and technology.
       </>
     ),
   },
@@ -110,7 +111,7 @@ const about = {
           // optional: leave the array empty if you don't want to display images
           {
             src: "/images/projects/project-01/cover-01.png",
-            alt: "Once UI Project",
+            alt: "ZVIA",
             width: 16,
             height: 9,
           },
