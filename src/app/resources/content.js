@@ -54,12 +54,10 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Full Stack developer, ML model builder and Tech enthusiastic</>,
+  headline: <>Full-Stack Developer  ML Innovator  Tech junkie</>,
   subline: (
     <>
-      I'm Yashvardhan, a Full Stack Developer, and worked at <InlineCode>ZVIA</InlineCode>, where I crafted intuitive
-      <br /> user experiences for school and college students. After hours, I build my own projects and learning Machine Learning and AI.
-    </>
+      I'm Yashvardhan, a Full Stack Developer, I train ML models for Pattern Recognition in Large Datasets. or torturing neural networks to play games i am bad at.     <br />    After hours I just enjoy speed cubing and learning new things. </>
   ),
 };
 
@@ -123,12 +121,11 @@ const about = {
         role: "Freelancer",
         achievements: [
           <>
-            Developed a content strategy that increased engagement by 50% across multiple social media platforms,
-            ensuring a consistent brand voice for freelancers.
+            Developed a content strategy that increased engagement across multiple social media platforms,
+            ensuring a consistent brand voice for the Influencer.
           </>,
           <>
-            Led a social media campaign that boosted freelancer visibility,
-            resulting in a 20% increase in client inquiries and project conversions.          </>,
+            paved a different path for the brand strategy by studying the market and making suggesting change in the content to help find their niche         </>,
         ],
         images: [],
       },
