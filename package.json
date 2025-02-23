@@ -39,5 +39,8 @@
     "postcss-custom-media": "^10.0.7",
     "postcss-flexbugs-fixes": "^5.0.2",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@next/swc": "npm:@next/swc-linux-x64@latest"
   }
 }
