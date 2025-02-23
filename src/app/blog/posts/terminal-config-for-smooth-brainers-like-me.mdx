@@ -1,32 +1,37 @@
 ---
 title: "My Developer Workflow Using macOS, tmux, and Neovim with Lazy Config"
 publishedAt: "2025-02-23"
-summary: "config your terminal with me for better experience"
+summary: "Configuring your terminal like a civilized human being."
+images:
+  - "/images/blogs/blog-01.png"
+
 tag: "Technology"
 ---
 
-
 # My Developer Workflow Using macOS, tmux, and Neovim with Lazy Config
 
-Hi! Today I'm gonna talk about my daily developer workflow and all the tools I use to set up a productive environment for coding. I think having a nice-looking terminal and some tools to save time are really helpful to keep you productive in daily coding sessions.
+Welcome to yet another developer setup post, because apparently, configuring a terminal is a personality trait now. But hey, if you want to look like a real hacker while barely writing any code, stick around.
 
 ## Operating System
 
-I use **macOS** as my primary development environment. macOS provides a Unix-based system with great developer tools and is perfect for software development. With **Homebrew**, I can easily install and manage packages like a pro.
+I use **macOS** because it’s Unix-based, has great developer tools, and lets me feel superior to Windows users. Plus, Homebrew makes package management so easy that I barely have to think—which, frankly, is ideal.
 
 ## Shell
 
-macOS ships with **zsh** as the default shell, and I stick with it. To enhance my zsh experience, I use **Powerlevel10k** for my prompt. Powerlevel10k is highly customizable, fast, and provides an elegant prompt setup.
+macOS ships with **zsh** by default, and since resisting defaults takes effort, I stick with it.
+
+SIKE
+
+I use iterm2 like a basic bitch with nerd font because .... are these jokes even landing, unlike the jokes the config hits hard
+To make my terminal look unnecessarily fancy, I use **Powerlevel10k** because a cluttered prompt full of useless information is the peak of productivity, or atleast helps to see which branch you are on and how behind so that next time you dont lose all of your progress in a rebase issue during your hackathon.
 
 ### Installing Powerlevel10k
-
-To install Powerlevel10k, use:
 
 ```sh
 brew install romkatv/powerlevel10k/powerlevel10k
 ```
 
-Then, configure it by running:
+Then, make your terminal even more unreadable:
 
 ```sh
 p10k configure
@@ -34,32 +39,30 @@ p10k configure
 
 ## Prompt Configuration
 
-Here’s my **Powerlevel10k** configuration snippet:
+Here’s my **Powerlevel10k** configuration snippet, because looking at my CPU usage while writing JavaScript makes me feel like I’m doing something important:
 
 ```sh
 # ~/.zshrc
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 ```
 
-Powerlevel10k makes my terminal not only aesthetically pleasing but also functional, displaying Git status, time, and system info in a neat way.
-
 ## Persistent Terminal Sessions with tmux
 
-[tmux](https://github.com/tmux/tmux) is a terminal multiplexer. It allows me to manage multiple terminal sessions, switch between workspaces, and keep processes running even after I close my terminal.
+**tmux** lets me keep my terminal sessions open forever, because closing things properly is overrated.
 
 ### My tmux Workflow
 
-I use tmux to quickly navigate between projects:
+I use tmux so I can jump between projects without using my mouse like some kind of casual:
 
 ```sh
 alias work="tmux attach-session -t work"
 ```
 
-Now, I can type `work` and jump right into my tmux session!
+Now I can type `work` and get back to whatever I was pretending to do before.
 
 ## Neovim with Lazy Config
 
-I use **Neovim** as my primary code editor with **Lazy.nvim** as my plugin manager. Neovim is lightweight, fast, and allows deep customization.
+I use **Neovim** because VS Code opens too fast and I like the thrill of debugging my own editor.
 
 ### Installing Neovim and Lazy.nvim
 
@@ -67,7 +70,7 @@ I use **Neovim** as my primary code editor with **Lazy.nvim** as my plugin manag
 brew install neovim
 ```
 
-To set up Lazy.nvim, run:
+To set up Lazy.nvim, the best plugin manager since sliced bread:
 
 ```sh
 git clone --depth 1 https://github.com/folke/lazy.nvim ~/.config/nvim/lazy.nvim
@@ -75,38 +78,24 @@ git clone --depth 1 https://github.com/folke/lazy.nvim ~/.config/nvim/lazy.nvim
 
 ### My Neovim Config
 
-My Neovim configuration is designed for speed and productivity. Here’s a snippet from my **init.lua**:
-
-```lua
-require("lazy").setup({
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-  { "neovim/nvim-lspconfig" },
-  { "hrsh7th/nvim-cmp" },
-})
-```
-
-Neovim with Lazy.nvim allows me to extend my editor with powerful plugins like LSP support, fuzzy finding, and auto-completion.
+Because configuring an editor should take longer than actually coding.
 
 ## Productivity Boosters
 
-Here are a few more tools I use to enhance my workflow:
+A few more tools to pretend I’m getting work done:
 
-- **[zoxide](https://github.com/ajeetdsouza/zoxide)** – Smarter `cd` command for quick directory navigation.
-- **[exa](https://the.exa.website/)** – A modern replacement for `ls` with better formatting and icons.
-- **[fzf](https://github.com/junegunn/fzf)** – Fuzzy finder for navigating files and command history quickly.
+- **[zoxide](https://github.com/ajeetdsouza/zoxide)** – Because typing full directory paths is for amateurs.
+- **[eza](https://github.com/eza-community/eza)** – A modern replacement for `ls` that makes me feel like I’m using a cutting-edge system instead of just listing files.
+- **[fzf](https://github.com/junegunn/fzf)** – Fuzzy finding, because typing the full file name is too much effort.
 
 ### My `zshrc` Aliases
 
 ```sh
-alias ll="exa -l --icons"
-alias llt="exa -T --icons"
+alias ll="eza -l --icons"
+alias llt="eza -T --icons"
 alias z="zoxide"
 ```
 
 ## Conclusion
 
-That was a quick overview of all the tools I use daily for coding on macOS. Setting up a productive environment takes time, but once you have it fine-tuned, it significantly boosts your efficiency.
-
-I hope you found my workflow helpful and maybe even incorporated some of these tools into your setup!
-
-Thanks for reading! 🚀
+And that’s my setup—because spending days perfecting a terminal environment is obviously the best way to be productive. Hopefully, this post has inspired you to sink a few hours into tweaking your setup instead of actually working. Enjoy your perfectly configured development environment, which will surely make you write better code… or at least look like you do.
