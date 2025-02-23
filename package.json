@@ -12,7 +12,6 @@
     "@floating-ui/react-dom": "^2.1.1",
     "@mdx-js/loader": "^3.1.0",
     "@next/mdx": "^14.2.16",
-    "@next/swc-darwin-x64": "^15.1.7",
     "classnames": "^2.5.1",
     "cookie": "^1.0.1",
     "gray-matter": "^4.0.3",
@@ -39,8 +38,5 @@
     "postcss-custom-media": "^10.0.7",
     "postcss-flexbugs-fixes": "^5.0.2",
     "typescript": "^5"
-  },
-  "overrides": {
-    "@next/swc": "npm:@next/swc-linux-x64@latest"
   }
 }
