@@ -1,33 +1,113 @@
 ---
-title: "The rise of design engineering"
-publishedAt: "2024-03-05"
-summary: "In recent years, the role of design engineering has evolved from a specialized niche to a critical component in the development of innovative products and solutions."
+title: "My Developer Workflow Using macOS, tmux, and Neovim with Lazy Config"
+publishedAt: "2025-02-23"
+summary: "config your terminal with me for better experience"
 tag: "Technology"
 ---
 
-The Rise of Design Engineering
-In recent years, the role of design engineering has evolved from a specialized niche to a critical component in the development of innovative products and solutions. The seamless integration of design principles with engineering expertise has become essential in shaping not only the functionality of products but also the user experience, sustainability, and overall impact. So, what’s driving this shift, and why is design engineering more relevant than ever before?
 
-## Where Engineering Meets Creativity
+# My Developer Workflow Using macOS, tmux, and Neovim with Lazy Config
 
-Traditionally, engineering and design were viewed as separate disciplines. Engineers focused on solving technical problems, while designers were concerned with aesthetics and user experience. However, as products become more complex and user-centered, the need for a unified approach has grown. Design engineering bridges this gap by combining the precision of engineering with the creativity of design. It’s where form meets function, ensuring that products are not only technically sound but also intuitive, visually appealing, and user-friendly.
+Hi! Today I'm gonna talk about my daily developer workflow and all the tools I use to set up a productive environment for coding. I think having a nice-looking terminal and some tools to save time are really helpful to keep you productive in daily coding sessions.
 
-## The User-Centered Revolution
+## Operating System
 
-One of the biggest factors in the rise of design engineering is the shift toward user-centered design. Whether it’s a smartphone, a medical device, or an automotive system, today’s products are expected to be intuitive, responsive, and aligned with user needs. Design engineers play a pivotal role in this transformation by focusing on the end-user from the very beginning of the development process. Instead of approaching design and engineering as separate stages, they merge them into a cohesive workflow that considers usability, ergonomics, and aesthetics alongside structural integrity and functionality.
+I use **macOS** as my primary development environment. macOS provides a Unix-based system with great developer tools and is perfect for software development. With **Homebrew**, I can easily install and manage packages like a pro.
 
-## Sustainability and Innovation
+## Shell
 
-As the world becomes increasingly conscious of environmental impacts, design engineers are at the forefront of creating sustainable solutions. From selecting eco-friendly materials to designing for energy efficiency and minimizing waste, their work is crucial in driving sustainability initiatives across industries. The role of the design engineer extends beyond merely meeting technical requirements; it involves finding innovative ways to achieve sustainability without compromising on performance or aesthetics.
+macOS ships with **zsh** as the default shell, and I stick with it. To enhance my zsh experience, I use **Powerlevel10k** for my prompt. Powerlevel10k is highly customizable, fast, and provides an elegant prompt setup.
 
-## The Digital Transformation
+### Installing Powerlevel10k
 
-The digital revolution has also played a significant role in the rise of design engineering. Advanced tools such as computer-aided design (CAD) software, simulation, and rapid prototyping have empowered design engineers to push boundaries and experiment with ideas that were previously impossible. Virtual testing and iterative development processes allow for quick adjustments and refinements, enabling more sophisticated and optimized designs. This integration of digital technology with traditional engineering practices has made design engineering a dynamic and rapidly evolving field.
+To install Powerlevel10k, use:
 
-## Collaboration and Interdisciplinary Work
+```sh
+brew install romkatv/powerlevel10k/powerlevel10k
+```
 
-In the modern product development landscape, collaboration is key. Design engineering brings together experts from various fields—mechanical engineering, industrial design, electronics, materials science, and more—into a cohesive team. This interdisciplinary approach fosters innovation by allowing for a broader perspective on problems and solutions. Design engineers often act as the glue that holds these teams together, ensuring that everyone’s contributions align to create a product that is both technically sound and user-centric.
+Then, configure it by running:
 
-## Looking Ahead
+```sh
+p10k configure
+```
 
-The rise of design engineering signals a fundamental shift in how we approach product development. It’s no longer enough to have a product that simply works; it must also resonate with users, be sustainable, and push the boundaries of innovation. As technology continues to advance and user expectations evolve, design engineers will be increasingly critical in shaping the future. Their unique blend of creative thinking and technical expertise will continue to drive the development of products that are not only functional but also meaningful.
+## Prompt Configuration
+
+Here’s my **Powerlevel10k** configuration snippet:
+
+```sh
+# ~/.zshrc
+source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+```
+
+Powerlevel10k makes my terminal not only aesthetically pleasing but also functional, displaying Git status, time, and system info in a neat way.
+
+## Persistent Terminal Sessions with tmux
+
+[tmux](https://github.com/tmux/tmux) is a terminal multiplexer. It allows me to manage multiple terminal sessions, switch between workspaces, and keep processes running even after I close my terminal.
+
+### My tmux Workflow
+
+I use tmux to quickly navigate between projects:
+
+```sh
+alias work="tmux attach-session -t work"
+```
+
+Now, I can type `work` and jump right into my tmux session!
+
+## Neovim with Lazy Config
+
+I use **Neovim** as my primary code editor with **Lazy.nvim** as my plugin manager. Neovim is lightweight, fast, and allows deep customization.
+
+### Installing Neovim and Lazy.nvim
+
+```sh
+brew install neovim
+```
+
+To set up Lazy.nvim, run:
+
+```sh
+git clone --depth 1 https://github.com/folke/lazy.nvim ~/.config/nvim/lazy.nvim
+```
+
+### My Neovim Config
+
+My Neovim configuration is designed for speed and productivity. Here’s a snippet from my **init.lua**:
+
+```lua
+require("lazy").setup({
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+  { "neovim/nvim-lspconfig" },
+  { "hrsh7th/nvim-cmp" },
+})
+```
+
+Neovim with Lazy.nvim allows me to extend my editor with powerful plugins like LSP support, fuzzy finding, and auto-completion.
+
+## Productivity Boosters
+
+Here are a few more tools I use to enhance my workflow:
+
+- **[zoxide](https://github.com/ajeetdsouza/zoxide)** – Smarter `cd` command for quick directory navigation.
+- **[exa](https://the.exa.website/)** – A modern replacement for `ls` with better formatting and icons.
+- **[fzf](https://github.com/junegunn/fzf)** – Fuzzy finder for navigating files and command history quickly.
+
+### My `zshrc` Aliases
+
+```sh
+alias ll="exa -l --icons"
+alias llt="exa -T --icons"
+alias z="zoxide"
+```
+
+## Conclusion
+
+That was a quick overview of all the tools I use daily for coding on macOS. Setting up a productive environment takes time, but once you have it fine-tuned, it significantly boosts your efficiency.
+
+I hope you found my workflow helpful and maybe even incorporated some of these tools into your setup!
+
+Thanks for reading! 🚀
+
