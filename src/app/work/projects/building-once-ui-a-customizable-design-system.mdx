@@ -1,0 +1,95 @@
+---
+title: "Forcing an AI to learn Flappy bird NEATly"
+publishedAt: "2025-03-08"
+summary: "AI using NEAT in a game environment, demonstrating how evolution-based learning can lead to high-performing AI models." 
+images:
+  - "/images/projects/project-01/cover-121.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Software Engineer"
+    avatar: "/images/avatar-01.jpeg "
+    linkedIn: "https://www.linkedin.com/in/yashvardhan-singh-35512a228/"
+
+---
+
+
+# Case Study: Training AI to Play Flappy Bird Using the NEAT Algorithm
+
+## Introduction
+
+Flappy Bird is a simple yet challenging game where a player controls a bird and must navigate through a series of pipes without colliding. The objective of this case study is to train an AI agent to play Flappy Bird effectively using the **NeuroEvolution of Augmenting Topologies (NEAT)** algorithm. NEAT is a genetic algorithm that evolves neural networks over generations, allowing the AI to improve its decision-making over time.
+
+## Problem Definition
+
+The AI needs to control the bird, deciding whether to **jump** (flap) or do nothing (fall) based on the environment. The goal is to maximize the score by passing through as many pipes as possible.
+
+### Input Features
+
+The neural network receives the following input parameters:
+
+- The bird’s **vertical position**.
+- The **distance** to the next pipe.
+- The **height of the top pipe**.
+- The **height of the bottom pipe**.
+- The bird’s **vertical velocity**.
+
+### Output
+
+- A single output neuron that determines whether the bird **flaps (1)** or **does nothing (0)**.
+
+## Why Use NEAT?
+
+NEAT is effective for this problem because:
+
+- It **evolves both the structure and weights** of the neural network, starting from simple networks and increasing complexity as needed.
+- It uses **speciation** to preserve diversity and prevent premature convergence.
+- It allows for **crossover and mutation**, enabling continuous improvement of solutions.
+
+## Implementation Steps
+
+### 1. Setting Up the Environment
+
+- We use **Python** with the **NEAT-Python** library.
+- A Flappy Bird environment is created using **Pygame** or **Flappy Bird Gym**.
+
+### 2. Initializing the NEAT Algorithm
+
+- Define a **configuration file** for NEAT, specifying parameters such as population size, mutation rates, and network structure.
+- Initialize a **population** of simple neural networks with random weights.
+
+### 3. Evaluating Fitness
+
+- Each neural network controls a Flappy Bird agent.
+- The fitness function is defined as:
+  - **Fitness = Score** (number of pipes passed).
+  - **Penalty for collisions** to ensure survival-based evolution.
+
+### 4. Evolutionary Process
+
+- **Selection**: The best-performing agents are chosen to pass their genes to the next generation.
+- **Crossover**: Two high-performing networks combine to create offspring.
+- **Mutation**: Small changes in weights and structure introduce variations to avoid stagnation.
+- **Speciation**: NEAT groups similar networks to maintain diversity and prevent dominant species from taking over too early.
+
+### 5. Training and Improvement
+
+- The AI runs for multiple generations (~50-100).
+- Over time, networks learn to optimize their jumping behavior based on pipe positions.
+- The best-performing networks are saved and tested.
+
+## Conclusion
+
+The NEAT algorithm successfully trains an AI to play Flappy Bird by evolving neural networks that learn optimal jumping strategies. This case study demonstrates how neuroevolution can solve decision-based problems without explicit programming, showcasing the power of AI in game-playing applications.
+
+## Future Work
+
+- Implement **reinforcement learning (e.g., Deep Q-Learning)** to compare performance with NEAT.
+- Optimize neural network architectures to **reduce computational complexity**.
+- Experiment with different fitness functions for enhanced learning.
+
+### References
+
+- Stanley, K. O., & Miikkulainen, R. (2002). Evolving Neural Networks through Augmenting Topologies (NEAT). Evolutionary Computation.
+- NEAT-Python Documentation: [https://neat-python.readthedocs.io/en/latest/](https://neat-python.readthedocs.io/en/latest/)
+
+This case study provides a clear roadmap for training AI using NEAT in a game environment, demonstrating how evolution-based learning can lead to high-performing AI models.
