@@ -1,0 +1,83 @@
+
+---
+title: "Making projects overnight like it's a hackathon"
+publishedAt: "2025-05-22"
+summary: "Doing projects to keep you sane and not rut in a loop."
+images:
+  - "/images/blogs/blog-02.png"
+tag: "Yapping"
+---
+
+# From Pacman to ? : My Rollercoaster Ride Learning to Make Games
+
+The second best part of programming is seeing your code come to life. But the best part? Still that burst of dopamine when you get an instantaneous result. What better way to chase that high than by making a game—and then teaching an AI to play it?
+
+So there I was, after making a bet with my roommate:  
+*"Could we do a hackathon sprint over the weekend and create a barebones working game?"* I chose Pacman for the ego boost. He chose Breakout. I don’t mess with physics in coding, so I thought I had this in the bag.  
+I, in fact, didn't have it in the bag.
+
+### My Pacman Project: The Glorious Beginner’s Bump
+
+Pacman was my initiation — a simple grid, moving sprites, collision detection, ghosts chasing you down... Sounds easy in theory, but in practice, it was a classic “what the hell is going on” moment. Managing sprite movement and AI pathfinding for ghosts was a headache. Turns out, ghosts don’t just randomly wander around; they have their own personalities and algorithms (thanks, Google). That's how I learned the A* algorithm.
+
+**Learning bits from Pacman:**
+- Handling character movement on a grid — you gotta think about smooth animations and direction changes. Everything could be working fine and still feel off if the handling is wrong.
+- Collision detection is not just a checkbox; it needs careful thought about boundaries and object interactions.
+- AI can get complicated fast, even for simple games. (Always pitch it as future work — never overpromise.)
+
+**Slump:**  
+I coded the ghost movement so that they all stacked on the same spot because I forgot to update their individual positions separately. They would just get GHOSTED...
+
+---
+
+### Enter: The Parkour Game
+
+Fast forward, and now I’m working on a JavaScript game where the character can jump, glide (*falling but in style*), and even use thrusters to move through parkour-style levels. Yeah, it’s a whole vibe — like, why just run when you can *fly* a bit, right? Like Jump King but I’m too dumb to make it.
+
+This project is way more complex: physics simulations for jumps, momentum for gliding, thruster fuel management — ~hardcoded~ takes lots of trials and thinking.
+
+**What I’m learning now:**
+- Implementing realistic physics is tricky but makes a game feel alive. Gravity, momentum, acceleration — all of these have to work together seamlessly.
+- Input handling isn’t just about responding to keys; timing matters. How long you hold a jump key changes everything.
+- Game loops and frame updates are crucial — you want your character movements smooth and responsive, or players will rage quit fast.
+- Coyote time — if you understand this, we’re going to be friends. It’s basically a brief time period where you can still jump after running off a platform. It allows players a bigger window of opportunity and makes the experience more forgiving and fun.
+
+**Disaster story:**  
+Turns out the thrusters should have a cooldown period, or else you can just spam them and fly around like a caffeinated squirrel. I had to implement a fuel system to limit the thruster usage. And jump needs to be limited to a certain height or else you can just jump to godhood. Man, I don’t know how game dev works — I’m still figuring it out.
+
+---
+
+### The Space Invaders–Style Game: Today’s Challenge
+
+Today, I made a Space Invaders–type game. Clear inspirations from Chicken Invaders. You know, the classic shooter where chickens slowly descend and you have to blast them before they reach you? But there’s no egg.
+
+Implementing enemy waves and bullet collisions was a good exercise. Enemies drop down a level occasionally, and the player has one life. Sounds basic, but syncing movement patterns and bullet trajectories took more fiddling than I expected.
+
+**What I learned from this:**
+- Bullet collision detection needs to be precise; missing one frame can ruin the whole feel.
+- Simple UI feedback like score and lives count goes a long way to make the game feel complete. UI also helps when you revisit the project after a long time and forget what controls your smooth brain has hardcoded without an option to change it from the game itself.
+
+**Disaster story:**  
+At one point, my bullets weren’t disappearing after hitting enemies — they just kept flying, multiplying like some kind of digital plague. Turns out I forgot to remove bullets from the active array after collision. The screen became a chaotic mess of infinite bullets. FPS tanked, and my patience evaporated. Lesson learned: always clean up your objects.
+
+---
+
+### Why am I telling you all this?
+
+Because learning to build games is a marathon, not a sprint. Each project, no matter how frustrating, teaches you something new. Pacman taught me the basics of movement and AI. The Space Invaders game brought timing and group movement into play. The parkour game is pushing me into physics and advanced input control.
+
+If you’re just starting, don’t sweat the bugs or the weird glitches. That’s part of the process — and honestly, it’s kinda fun once you get the hang of it.
+
+---
+
+### Quick Tips for Fellow Beginners
+
+1. **Break down big problems.** Don’t try to build a full project in one go. Focus on one feature at a time — shooting, then enemy waves, then thrusters.
+2. **Test often.** Play your game every time you add a feature. It’ll save you hours of debugging later. Also, it's fun to mess around, and then accidentally break it — only to realize you forgot to use version control. Which brings me to my next point:
+3. **VERSION CONTROL:** Yeah, I’ll need to write a new blog to explain this.
+4. **Keep it simple.** Start with basic shapes and logic before adding fancy graphics or complex AI.
+5. **Use online resources.** Tutorials, forums, and open-source projects are your friends. Try not to vibe-code if you're trying to learn.
+6. **Be skeptical of perfection.** Your first game won’t be a masterpiece — it’s a learning tool. Embrace the chaos.
+
+---
+What about you? Ever tried making a game? Or want to? Don’t just think about it — jump in. and fuck around.
