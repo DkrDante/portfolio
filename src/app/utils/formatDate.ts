@@ -1,11 +1,28 @@
-export function formatDate(date: string, includeRelative = false) {
+
+export function formatDate(date?: string, includeRelative = false): string {
   const currentDate = new Date();
 
+  // Handle undefined/null/empty input
+  if (!date || typeof date !== "string") {
+    return currentDate.toLocaleString("en-us", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+
+  // Add time portion if it's missing
   if (!date.includes("T")) {
     date = `${date}T00:00:00`;
   }
 
   const targetDate = new Date(date);
+
+  // If date is invalid, return fallback
+  if (isNaN(targetDate.getTime())) {
+    return "Invalid Date";
+  }
+
   const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
   const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
   const daysAgo = currentDate.getDate() - targetDate.getDate();
@@ -28,9 +45,6 @@ export function formatDate(date: string, includeRelative = false) {
     year: "numeric",
   });
 
-  if (!includeRelative) {
-    return fullDate;
-  }
-
-  return `${fullDate} (${formattedDate})`;
+  return includeRelative ? `${fullDate} (${formattedDate})` : fullDate;
 }
+
