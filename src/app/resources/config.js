@@ -15,13 +15,13 @@ const protectedRoutes = {
 };
 
 const style = {
-  theme: "dark", //dark | light
+  theme: "dark", // dark | light
   neutral: "slate", // sand | gray | slate
-  brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  accent: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  brand: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  accent: "violet", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
   solid: "contrast", // color | contrast
   solidStyle: "flat", // flat | plastic
-  border: "playful", // rounded | playful | conservative
+  border: "rounded", // rounded | playful | conservative
   surface: "translucent", // filled | translucent
   transition: "all", // all | micro | macro
 };
@@ -42,13 +42,13 @@ const effects = {
     tilt: 0,
     colorStart: "brand-background-strong",
     colorEnd: "static-transparent",
-    opacity: 50,
+    opacity: 30, // Reduced opacity for subtlety
   },
   dots: {
     display: true,
-    size: 2,
+    size: 1, // Smaller dots for elegance
     color: "brand-on-background-weak",
-    opacity: 20,
+    opacity: 15, // Lower opacity for subtlety
   },
   lines: {
     display: false,
@@ -56,9 +56,9 @@ const effects = {
     opacity: 100,
   },
   grid: {
-    display: false,
+    display: true, // Enable grid for more visual interest
     color: "neutral-alpha-weak",
-    opacity: 100,
+    opacity: 30, // Low opacity for subtle background
   },
 };
 
@@ -85,7 +85,7 @@ const mailchimp = {
       tilt: -45,
       colorStart: "accent-background-strong",
       colorEnd: "static-transparent",
-      opacity: 100,
+      opacity: 80, // Slightly reduced for better balance
     },
     dots: {
       display: false,
@@ -101,7 +101,7 @@ const mailchimp = {
     grid: {
       display: true,
       color: "neutral-alpha-weak",
-      opacity: 100,
+      opacity: 50, // Increased for better visibility
     },
   },
 };
