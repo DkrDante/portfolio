@@ -1,0 +1,118 @@
+---
+title: "Empleadora — Decentralizing the Freelance Hustle in India"
+publishedAt: "2025-08-14"
+summary: "A hackathon-built MERN + Web3 platform focused on short-term freelance gigs in India, using blockchain escrow to keep payments secure."
+images:
+  - "/images/projects/empleadora/cover122.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Full Stack Developer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/yashvardhan-singh-35512a228/"
+---
+
+# Case Study: Empleadora — Decentralizing the Freelance Hustle in India
+
+## Introduction
+
+The Indian freelance space is crowded with platforms that love their *“service fees”* a bit too much.  
+Empleadora was born out of a simple premise — **freelancers should get paid fairly and on time, without having to trust a faceless middleman**.
+
+This platform, built during an **invite-only Avalanche Web3 hackathon in 24 hours**, is a **MERN + blockchain** solution for short-term and project-based gigs.  
+Think Fiverr, but with escrow-backed payments and no “Congratulations, you earned $100, here’s your $80 after fees” nonsense.
+
+---
+
+## Problem Definition
+
+Freelancers in India face:
+- 20–30% platform fees.
+- Late or disputed payments.
+- Platforms biased toward long-term contracts.
+- No blockchain-backed protection for either party.
+
+We set out to **cut the middleman without cutting trust**.
+
+---
+
+## Core Idea
+
+Empleadora combines **blockchain escrow** with a user-friendly marketplace to:
+- **Secure payments** via Avalanche smart contracts.
+- **Match gigs and freelancers** using AI recommendations.
+- Focus on **short-term and quick-turnaround projects**.
+- Provide built-in **portfolio & rating systems** for credibility.
+
+---
+
+## Tech Stack
+
+| Component       | Technology                  |
+|-----------------|-----------------------------|
+| Frontend        | React + Tailwind CSS         |
+| Backend         | Node.js (Express)            |
+| Database        | MongoDB                      |
+| Blockchain      | Avalanche C-Chain (escrow)   |
+| Payments        | Razorpay (non-crypto)        |
+| Auth            | JWT                          |
+| Deployment      | Vercel + AWS EC2             |
+
+---
+
+## Implementation Steps
+
+### 1. Design Sprint
+Mapped out the **gig discovery → application → delivery → payment release** flow to keep things frictionless.
+
+### 2. Blockchain Escrow
+Wrote and deployed smart contracts on the Avalanche testnet.  
+Debugging this was… fun. If your definition of fun involves staring at one misplaced bracket for an hour.
+
+### 3. MERN Backend
+APIs for:
+- Gig posting & browsing
+- User management
+- Payment release on contract fulfillment
+
+### 4. AI Matching Layer
+Implemented a lightweight recommendation system using TF-IDF + filters for duration, budget, and skill set.
+
+---
+
+## Challenges
+
+- **Time crunch**: 24 hours to ship an MVP.
+- **Minimal Avalanche documentation**: Half the time was spent reverse-engineering.
+- **UX vs Security**: Blockchain features had to feel invisible to the user.
+
+---
+
+## Wins
+
+- Fully functional MVP deployed and demoed at the hackathon.
+- Seamless integration of escrow without scaring off non-crypto users.
+- Positive feedback from judges for focusing on an **underserved niche** — short-term gigs.
+
+---
+
+## Lessons Learned
+
+- Hide blockchain complexity; users want security, not jargon.
+- Scope ruthlessly under time pressure.
+- There’s a massive untapped market for short-duration freelance work.
+
+---
+
+## Future Work
+
+- Upgrade AI matching to deep learning models.
+- Add a mobile app for on-the-go gig hunting.
+- Support multi-currency escrow for cross-border freelancing.
+
+---
+
+## Conclusion
+
+Empleadora is more than just a hackathon project — it’s a **statement** that freelancing in India doesn’t have to feel like gambling your paycheck.  
+Built with code, caffeine, and just enough sarcasm to keep the all-nighter fun.
+
