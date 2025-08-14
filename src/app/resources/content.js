@@ -94,11 +94,11 @@ const about = {
       {
         company: "ZVIA",
         timeframe: "February '24 - October '24 ",
-        role: "Techinal Lead",
+        role: "Technical Lead",
         achievements: [
           <>
-            Full Stack Developer crafted intuitive user experiences for school and college students. Inclduing recreation of retro games such as pacman and breakout,
-            Led a team of Developer to work on project as colaborative board for brainstorming and collaboration.
+            Full Stack Developer crafted intuitive user experiences for school and college students. Including recreation of retro games such as Pacman and Breakout,
+            Led a team of developers to work on project as collaborative board for brainstorming and collaboration.
 
           </>,
           <>
@@ -125,7 +125,7 @@ const about = {
             ensuring a consistent brand voice for the Influencer.
           </>,
           <>
-            paved a different path for the brand strategy by studying the market and making suggesting change in the content to help find their niche         </>,
+            Paved a different path for the brand strategy by studying the market and making suggested changes in the content to help find their niche         </>,
         ],
         images: [],
       },
@@ -136,7 +136,7 @@ const about = {
     title: "Studies",
     institutions: [
       {
-        name: "Vellore institute of technology",
+        name: "Vellore Institute of Technology",
         description: <>Studied Computer Science with specialisation in Artificial Intelligence and Robotics.</>,
       },
       {
@@ -151,7 +151,7 @@ const about = {
     skills: [
       {
         title: "C++",
-        description: <>Main programming language i use c++ for college work and Competitive Programming </>,
+        description: <>Main programming language I use C++ for college work and Competitive Programming </>,
       },
       {
         title: "Python",
@@ -167,7 +167,7 @@ const about = {
       },
       {
         title: "AI Integration",
-        description: <> Forcing AI to do stupid shit that I want.</>,
+        description: <>Integrating AI systems and forcing them to do exactly what I want.</>,
       },
 
     ],

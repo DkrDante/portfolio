@@ -17,13 +17,37 @@ export async function generateMetadata() {
     metadataBase: new URL(`https://${baseURL}`),
     title: home.title,
     description: home.description,
+    keywords: ["Full Stack Developer", "Machine Learning", "AI", "React", "Next.js", "Portfolio", "Web Development"],
+    authors: [{ name: person.name }],
+    creator: person.name,
+    publisher: person.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
     openGraph: {
-      title: `${person.firstName}'s Portfolio`,
-      description: "Portfolio website showcasing my work.",
-      url: baseURL,
-      siteName: `${person.firstName}'s Portfolio`,
+      title: `${person.name}'s Portfolio`,
+      description: `Portfolio website showcasing ${person.name}'s work as a ${person.role}`,
+      url: `https://${baseURL}`,
+      siteName: `${person.name}'s Portfolio`,
       locale: "en_US",
       type: "website",
+      images: [
+        {
+          url: `${person.avatar}`,
+          width: 1200,
+          height: 630,
+          alt: `${person.name} - ${person.role}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${person.name}'s Portfolio`,
+      description: `Portfolio website showcasing ${person.name}'s work as a ${person.role}`,
+      images: [person.avatar],
+      creator: "@DkrDante",
     },
     robots: {
       index: true,
@@ -35,6 +59,9 @@ export async function generateMetadata() {
         "max-image-preview": "large",
         "max-snippet": -1,
       },
+    },
+    verification: {
+      google: "your-google-verification-code",
     },
   };
 }
