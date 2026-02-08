@@ -1,0 +1,139 @@
+---
+title: "Training an AI to Play Super Mario Bros with PPO"
+publishedAt: "2026-02-08"
+summary: "A reinforcement learning agent trained with Proximal Policy Optimization using parallel environments and custom reward shaping to complete Super Mario levels."
+images:
+  - "/images/projects/project-01/mario-cover.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Software Engineer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Case Study: Training a PPO Agent to Play Super Mario Bros
+
+## Introduction
+
+Super Mario Bros is a classic platformer that requires precise timing, spatial awareness, and long-term planning. The objective of this project was to train an AI agent capable of completing Mario levels using **Proximal Policy Optimization (PPO)**, a modern reinforcement learning algorithm.
+
+The agent learns directly from game frames using a **convolutional neural network** and improves its performance through repeated interaction with the environment.
+
+## Problem Definition
+
+The AI agent must control Mario in a dynamic environment filled with enemies, obstacles, and gaps. The goal is to:
+
+- Move forward through the level.
+- Avoid enemies and hazards.
+- Reach the end of the stage.
+
+The challenge lies in learning optimal actions from raw visual input without explicit instructions.
+
+### Input
+
+The neural network receives:
+
+- Preprocessed grayscale game frames.
+- Stacked frames to capture motion and velocity.
+
+### Output
+
+- Discrete action choices such as:
+  - Move left
+  - Move right
+  - Jump
+  - Run + jump combinations
+
+## Why Use PPO?
+
+Proximal Policy Optimization was chosen because:
+
+- It provides stable and reliable training compared to earlier policy-gradient methods.
+- It uses a clipped objective function to prevent destructive updates.
+- It works well with parallel environments, speeding up learning.
+
+PPO is widely used in modern reinforcement learning research due to its balance between performance and simplicity.
+
+## Implementation Steps
+
+### 1. Environment Setup
+
+- Used Gym Super Mario Bros with Nes-Py.
+- Applied environment wrappers to:
+  - Resize and grayscale frames.
+  - Stack consecutive frames.
+  - Simplify action space.
+
+### 2. Neural Network Architecture
+
+- A convolutional neural network processes visual frames.
+- Extracted features are passed to:
+  - A policy head for action selection.
+  - A value head for state evaluation.
+
+### 3. Parallel Training
+
+- Multiple game environments run simultaneously.
+- Each environment collects experience.
+- Experiences are combined to update the PPO model.
+
+This significantly reduces training time and improves sample efficiency.
+
+### 4. Reward Shaping
+
+A custom reward function was designed to:
+
+- Reward forward movement.
+- Penalize deaths and inactivity.
+- Encourage faster level completion.
+
+This helps the agent learn meaningful strategies faster.
+
+### 5. Training Loop
+
+- The agent collects trajectories from parallel environments.
+- PPO updates the policy using:
+  - Clipped surrogate objective.
+  - Advantage estimation.
+- The model is saved periodically.
+- Training progress is logged to TensorBoard.
+
+## Results
+
+- The agent learns to:
+  - Move forward consistently.
+  - Avoid basic obstacles.
+  - Reach further sections of the level over time.
+- Training stability improved with:
+  - Parallel environments.
+  - Reward shaping.
+
+## Tech Stack
+
+- Python
+- PyTorch
+- Proximal Policy Optimization (PPO)
+- Gym Super Mario Bros
+- Nes-Py
+- OpenCV
+- NumPy
+- torch.multiprocessing
+- TensorBoard
+
+## Key Learnings
+
+- PPO provides stable learning in high-dimensional environments.
+- Parallel environments dramatically improve training speed.
+- Reward shaping is critical for complex game tasks.
+
+## Future Work
+
+- Train on multiple worlds and stages.
+- Compare PPO with algorithms like DQN, A3C, and SAC.
+- Introduce curriculum learning for progressive difficulty.
+
+### References
+
+- Schulman, J. et al. (2017). *Proximal Policy Optimization Algorithms*. arXiv:1707.06347.
+- OpenAI Spinning Up: https://spinningup.openai.com
+- Gym Super Mario Bros Documentation: https://github.com/Kautenja/gym-super-mario-bros
