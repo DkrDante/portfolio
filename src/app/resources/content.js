@@ -36,7 +36,7 @@ const social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/in/yashvardhan-singh-35512a228/",
+    link: "https://www.linkedin.com/in/dkrdante",
   },
   {
     name: "X",
@@ -54,10 +54,12 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Full-Stack Developer  ML Innovator  Tech junkie</>,
+  headline: <>Full-Stack Developer AI/ML Engineer Tech Junkie
+</>,
   subline: (
     <>
-      I'm Yashvardhan, a Full Stack Developer, I train ML models for Pattern Recognition in Large Datasets. or torturing neural networks to play games i am bad at.     <br />    After hours I just enjoy speed cubing and learning new things. </>
+     I’m Yashvardhan, a full-stack developer who builds AI systems, weird projects, and the occasional research experiment. I train machine learning models to find patterns in messy data—or to beat games I’m terrible at.
+After hours, I’m usually speed-cubing or obsessing over something new I just decided to learn.</>
   ),
 };
 
@@ -81,9 +83,7 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Yashvardhan is a India-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. His work spans digital interfaces, interactive
-        experiences, and the convergence of simplicity and technology.
+Yashvardhan is an Indian full stack developer and AI engineer who focuses on building intelligent, reliable systems. His work spans web platforms, machine learning applications, and research-driven solutions at the intersection of software and real-world problems.
       </>
     ),
   },
