@@ -77,8 +77,8 @@ To prevent accidental triggers:
 
 * **Pinch exclusivity:** Pinch only activates drawing-related actions.
 * **Mode Locks:** Tool switching is disabled during an active pinch.
-* **Deliberate Destruction:** "Clear Canvas" requires a deliberate 2-second fist hold with a visual progress bar.
-* **Temporal Filters:** Swipe gestures use cooldown timers to prevent "double-triggering."
+* **Deliberate Destruction:** Clear Canvas requires a deliberate 2-second fist hold with a visual progress bar.
+* **Temporal Filters:** Swipe gestures use cooldown timers to prevent double-triggering.
 
 ---
 
@@ -86,13 +86,13 @@ To prevent accidental triggers:
 
 ### 1. Hand Landmark Tracking
 
-MediaPipe provides 21 landmarks. From these, the system computes finger extension states. A finger is considered extended if the tip's y-coordinate is less than the pip-joint's y-coordinate ($y_{tip} < y_{pip}$).
+MediaPipe provides 21 landmarks. From these, the system computes finger extension states. A finger is considered extended if the tip's y-coordinate is less than the pip-joint's y-coordinate (y_tip < y_pip).
 
 ### 2. Pinch Detection and Smoothing
 
 Pinch detection incorporates temporal smoothing to reduce jitter:
 
-* Maintain a buffer of the last $N$ pinch distances.
+* Maintain a buffer of the last N pinch distances.
 * Compute a moving average.
 * Apply a threshold comparison for state switching.
 
@@ -108,16 +108,16 @@ The system implements a world-space canvas:
 
 A two-stack architecture manages state:
 
-* **Action:** New action $\rightarrow$ push state to `undo_stack`.
+* **Action:** New action → push state to `undo_stack`.
 * **Undo:** Pop `undo_stack`, push to `redo_stack`.
 * **Redo:** Pop `redo_stack`, push back to `undo_stack`.
-* *Note: Stack size is capped at 20 states to prevent memory overflow.*
+* **Note:** Stack size is capped at 20 states to prevent memory overflow.
 
 ---
 
 ## Stability and Performance Optimizations
 
-To maintain real-time responsiveness ($>30$ FPS):
+To maintain real-time responsiveness (>30 FPS):
 
 * **Cursor Smoothing:** Mean filter applied to fingertip coordinates.
 * **Velocity Thresholding:** Swipes are only registered if the hand speed exceeds a specific pixels-per-frame limit.

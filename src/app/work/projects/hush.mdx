@@ -1,0 +1,104 @@
+---
+title: "Hush – Minimalist Real-Time Noise Suppression"
+publishedAt: "2025-03-09"
+summary: "An AI-powered audio enhancement tool designed to suppress background noise in real-time using deep learning models, optimized for low-latency communication and recording."
+images:
+  - "/images/projects/project-01/hush-cover.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Lead Developer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Case Study: Developing Hush – AI-Driven Background Noise Suppression
+
+---
+
+## Introduction
+
+Hush is a high-performance **real-time noise suppression system** designed to isolate human speech from complex background environments. Unlike traditional spectral subtraction methods, Hush utilizes deep learning architectures to distinguish between voice and ambient noise—such as keyboard clicks, fans, or traffic—with minimal rhythmic distortion.
+
+### Core Technologies Used
+
+* **PyTorch / TensorFlow:** Model training and inference.
+* **RNNoise / DeepFilterNet:** Base architectures for real-time speech enhancement.
+* **FFmpeg & PyAudio:** Real-time audio stream handling and processing.
+* **NumPy:** Signal processing and Fourier transform operations.
+
+The objective was to create a "set-and-forget" utility that provides studio-quality clarity in non-ideal acoustic environments.
+
+---
+
+## System Architecture Overview
+
+Hush operates as a digital signal processing (DSP) pipeline that sits between the audio input and the final output:
+
+1.  **Capture Layer:** High-frequency sampling of raw pulse-code modulation (PCM) audio data.
+2.  **Feature Extraction:** Conversion of time-domain signals into the frequency domain using Short-Time Fourier Transform (STFT).
+3.  **Neural Inference:** A gated recurrent unit (GRU) or Convolutional architecture predicts a "gain mask" for each frequency bin.
+4.  **Reconstruction:** Application of the mask to suppress noise, followed by Inverse STFT (iSTFT) to return to the time domain.
+5.  **Output Layer:** Injection of the cleaned audio into a virtual microphone sink or recording file.
+
+---
+
+## Problem Definition
+
+Effective noise suppression faces several critical technical hurdles:
+
+* **Latency:** Real-time communication requires processing delays under 20ms to avoid desync.
+* **Speech Distortion:** Over-aggressive filtering often leads to "robotic" or underwater-sounding voices.
+* **Non-Stationary Noise:** Handling unpredictable sounds like a door slamming is significantly harder than filtering constant fan hum.
+* **Resource Consumption:** The model must remain lightweight enough to run alongside CPU-intensive tasks like gaming or video conferencing.
+
+---
+
+## Technical Implementation
+
+### 1. The Masking Approach
+Instead of trying to "subtract" noise, Hush calculates a **Ratio Mask**. The model determines the probability of speech being present in a specific frequency range. If the probability is low, the gain for that range is reduced to near zero, effectively silencing the noise while leaving the speech frequencies untouched.
+
+### 2. Low-Latency Optimization
+To achieve near-instantaneous processing, Hush utilizes:
+* **Overlapping Frames:** Audio is processed in small windows (e.g., 10-20ms) with a 50% overlap to ensure smooth transitions.
+* **Quantization:** Neural network weights are quantized to 8-bit integers, significantly reducing the computational load on the CPU.
+
+### 3. Voice Activity Detection (VAD)
+Hush integrates a sophisticated VAD module. When no speech is detected, the system can enter a "comfort noise" state, preventing the eerie total silence that can sometimes make a connection feel "dead" to the listener.
+
+---
+
+## User Experience & Interface
+
+Hush was designed with a **minimalist, luxury aesthetic** consistent with the Osocius Dynamics design philosophy:
+
+* **One-Click Activation:** A simple toggle to enable/disable suppression.
+* **Intensity Slider:** Allows users to find the balance between total silence and natural voice preservation.
+* **Visualizer:** Real-time spectral analysis showing the "before" and "after" of the audio signal.
+
+---
+
+## Stability and Performance
+
+To ensure reliability during long sessions:
+* **Buffer Management:** Implements a circular buffer to prevent audio crackling during CPU spikes.
+* **Automatic Gain Control (AGC):** Normalizes voice levels so the user doesn't become too quiet after noise is removed.
+* **Cross-Platform Compatibility:** Designed to interface with PulseAudio (Linux) and CoreAudio (macOS).
+
+---
+
+## Conclusion
+
+Hush demonstrates the power of integrating deep learning with traditional DSP. By moving away from static filters and toward intelligent, adaptive masking, Hush provides a professional-grade communication experience regardless of the user's surroundings.
+
+### Future Work
+* **Spatial Filtering:** Using multi-microphone arrays to isolate sound based on direction.
+* **Personalized Voice Print:** Training the model to ignore other people talking in the background.
+* **Mobile Port:** Optimizing the inference engine for Android and iOS devices.
+
+---
+
+## References
+1.  **Valin, J. M. (2018)** - *RNNoise: Learning Noise Suppression*.
+2.  **Schröter, H., et al. (2022)** - *DeepFilterNet: A Low-Complexity Speech Enhancement Framework*.
+3.  **Standard DSP Theory** - *Short-Time Fourier Transform and Signal Reconstruction*.
