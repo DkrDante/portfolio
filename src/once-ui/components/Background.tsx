@@ -145,7 +145,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
         return {
           "--mask-position-x": `${smoothPosition.x}px`,
           "--mask-position-y": `${smoothPosition.y}px`,
-          "--mask-radius": `${mask.radius || 50}vh`,
+          "--mask-radius": `${mask.radius || 30}vh`,
         } as CSSProperties;
       }
 
@@ -153,7 +153,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
         return {
           "--mask-position-x": `${mask.x}%`,
           "--mask-position-y": `${mask.y}%`,
-          "--mask-radius": `${mask.radius || 50}vh`,
+          "--mask-radius": `${mask.radius || 30}vh`,
         } as CSSProperties;
       }
 
