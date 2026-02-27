@@ -1,104 +1,115 @@
 ---
-title: "Hush – Minimalist Real-Time Noise Suppression"
+title: "Hush – Real-Time Indian Sign Language (ISL) Interpretation"
 publishedAt: "2025-03-09"
-summary: "An AI-powered audio enhancement tool designed to suppress background noise in real-time using deep learning models, optimized for low-latency communication and recording."
+summary: "An accessible front-end application leveraging computer vision to interpret Indian Sign Language (ISL) gestures into text and speech, bridging the communication gap for the mute community."
 images:
-  - "/images/projects/project-01/hush-cover.png"
+  - "/images/projects/hush/hush-cover.png"
 team:
   - name: "Yashvardhan Singh"
-    role: "Lead Developer"
+    role: "Software Engineer"
     avatar: "/images/avatar-01.jpeg"
     linkedIn: "https://www.linkedin.com/in/dkrdante/"
 ---
 
-# Case Study: Developing Hush – AI-Driven Background Noise Suppression
+# Case Study: Developing Hush – An ISL Interpreter for Inclusive Communication
 
 ---
 
 ## Introduction
 
-Hush is a high-performance **real-time noise suppression system** designed to isolate human speech from complex background environments. Unlike traditional spectral subtraction methods, Hush utilizes deep learning architectures to distinguish between voice and ambient noise—such as keyboard clicks, fans, or traffic—with minimal rhythmic distortion.
+**Hush** is a gesture-to-speech translation platform designed to empower individuals who rely on Indian Sign Language (ISL). By utilizing a standard webcam and real-time computer vision, Hush interprets complex hand gestures and converts them into text and audible speech, providing a seamless communication bridge between signers and non-signers.
 
 ### Core Technologies Used
 
-* **PyTorch / TensorFlow:** Model training and inference.
-* **RNNoise / DeepFilterNet:** Base architectures for real-time speech enhancement.
-* **FFmpeg & PyAudio:** Real-time audio stream handling and processing.
-* **NumPy:** Signal processing and Fourier transform operations.
+* **MediaPipe:** For high-fidelity 21-point hand landmark tracking.
+* **TensorFlow / Keras:** Deep learning models for gesture classification.
+* **React / Next.js:** For the minimalist, responsive front-end interface.
+* **OpenCV:** Real-time video frame processing and overlay rendering.
+* **Web Speech API:** For instantaneous text-to-speech (TTS) synthesis.
 
-The objective was to create a "set-and-forget" utility that provides studio-quality clarity in non-ideal acoustic environments.
+The objective was to create an accessible, browser-based tool that provides a voice to the mute community without the need for specialized hardware.
 
 ---
 
 ## System Architecture Overview
 
-Hush operates as a digital signal processing (DSP) pipeline that sits between the audio input and the final output:
+Hush follows a streamlined computer vision pipeline to ensure low-latency interaction:
 
-1.  **Capture Layer:** High-frequency sampling of raw pulse-code modulation (PCM) audio data.
-2.  **Feature Extraction:** Conversion of time-domain signals into the frequency domain using Short-Time Fourier Transform (STFT).
-3.  **Neural Inference:** A gated recurrent unit (GRU) or Convolutional architecture predicts a "gain mask" for each frequency bin.
-4.  **Reconstruction:** Application of the mask to suppress noise, followed by Inverse STFT (iSTFT) to return to the time domain.
-5.  **Output Layer:** Injection of the cleaned audio into a virtual microphone sink or recording file.
+1. **Input Layer:** High-frequency video capture from the user's webcam.
+2. **Landmark Extraction:** MediaPipe isolates the skeletal structure of the hands, extracting $x, y, z$ coordinates for 21 key points.
+
+3. **Feature Mapping:** Normalizing landmark coordinates to ensure accuracy regardless of hand distance from the camera.
+4. **Gesture Classification:** A neural network architecture (CNN/LSTM) identifies the specific ISL sign based on spatial orientation.
+5. **Output Layer:** The interpreted sign is displayed as text on the UI and broadcast via the system's speakers.
 
 ---
 
 ## Problem Definition
 
-Effective noise suppression faces several critical technical hurdles:
+Developing a reliable ISL interpreter faces several critical technical hurdles:
 
-* **Latency:** Real-time communication requires processing delays under 20ms to avoid desync.
-* **Speech Distortion:** Over-aggressive filtering often leads to "robotic" or underwater-sounding voices.
-* **Non-Stationary Noise:** Handling unpredictable sounds like a door slamming is significantly harder than filtering constant fan hum.
-* **Resource Consumption:** The model must remain lightweight enough to run alongside CPU-intensive tasks like gaming or video conferencing.
+* **Nuance Detection:** Distinguishing between similar-looking signs (e.g., 'A' vs. 'S' in finger-spelling).
+* **Latency:** Interpretation must feel instantaneous ($<100ms$) to maintain the natural rhythm of conversation.
+* **Environmental Variance:** The system must work across different lighting conditions and backgrounds.
+* **Linguistic Complexity:** ISL involves both static hand shapes and dynamic movements.
 
 ---
 
 ## Technical Implementation
 
-### 1. The Masking Approach
-Instead of trying to "subtract" noise, Hush calculates a **Ratio Mask**. The model determines the probability of speech being present in a specific frequency range. If the probability is low, the gain for that range is reduced to near zero, effectively silencing the noise while leaving the speech frequencies untouched.
+### 1. Spatial Coordinate Normalization
 
-### 2. Low-Latency Optimization
-To achieve near-instantaneous processing, Hush utilizes:
-* **Overlapping Frames:** Audio is processed in small windows (e.g., 10-20ms) with a 50% overlap to ensure smooth transitions.
-* **Quantization:** Neural network weights are quantized to 8-bit integers, significantly reducing the computational load on the CPU.
+To make the model robust, landmarks are normalized relative to the wrist position. This ensures that a "Hello" gesture is recognized correctly whether the user is 2 feet or 5 feet away from the lens.
 
-### 3. Voice Activity Detection (VAD)
-Hush integrates a sophisticated VAD module. When no speech is detected, the system can enter a "comfort noise" state, preventing the eerie total silence that can sometimes make a connection feel "dead" to the listener.
+### 2. Temporal Gesture Recognition
+
+For dynamic signs that involve motion, Hush utilizes a sliding window approach. It captures a sequence of frames to identify the trajectory of a gesture, allowing the model to distinguish between a stationary hand and a moving sign.
+
+### 3. Front-End Interpretation Engine
+
+The application is built to be "client-side first." By running the inference directly in the browser using TensorFlow.js, Hush ensures:
+
+* **Privacy:** Video data never leaves the user's device.
+* **Speed:** No round-trip latency to a backend server.
 
 ---
 
 ## User Experience & Interface
 
-Hush was designed with a **minimalist, luxury aesthetic** consistent with the Osocius Dynamics design philosophy:
+Hush follows the **Osocius Dynamics** design philosophy of "minimalist luxury":
 
-* **One-Click Activation:** A simple toggle to enable/disable suppression.
-* **Intensity Slider:** Allows users to find the balance between total silence and natural voice preservation.
-* **Visualizer:** Real-time spectral analysis showing the "before" and "after" of the audio signal.
+* **Clean Viewport:** A distraction-free video feed with a high-contrast subtitle overlay.
+* **Text-to-Speech Toggle:** Users can choose between visual-only or audio-visual output.
+* **Sign Glossary:** An integrated reference guide to help non-signers learn along with the app.
 
 ---
 
 ## Stability and Performance
 
-To ensure reliability during long sessions:
-* **Buffer Management:** Implements a circular buffer to prevent audio crackling during CPU spikes.
-* **Automatic Gain Control (AGC):** Normalizes voice levels so the user doesn't become too quiet after noise is removed.
-* **Cross-Platform Compatibility:** Designed to interface with PulseAudio (Linux) and CoreAudio (macOS).
+To ensure reliability in real-world scenarios:
+
+* **Confidence Thresholds:** The system only outputs text when the model's confidence exceeds 85%, reducing "hallucinated" translations.
+* **Auto-Correction:** Integrated NLP to predict the most likely next word in a sentence based on common ISL syntax.
+* **Visual Feedback:** A bounding box glows green when a gesture is successfully registered.
 
 ---
 
 ## Conclusion
 
-Hush demonstrates the power of integrating deep learning with traditional DSP. By moving away from static filters and toward intelligent, adaptive masking, Hush provides a professional-grade communication experience regardless of the user's surroundings.
+Hush demonstrates the power of AI to foster social inclusivity. By turning a common laptop into a sophisticated communication tool, it provides the mute community with a practical, everyday solution for navigating a hearing world.
 
 ### Future Work
-* **Spatial Filtering:** Using multi-microphone arrays to isolate sound based on direction.
-* **Personalized Voice Print:** Training the model to ignore other people talking in the background.
-* **Mobile Port:** Optimizing the inference engine for Android and iOS devices.
+
+* **Sentence Construction:** Moving from single-word recognition to full-sentence NLP.
+* **Two-Way Bridge:** Integrating a Speech-to-Sign avatar for deaf users.
+* **Mobile Optimization:** Progressive Web App (PWA) support for on-the-go use.
 
 ---
 
 ## References
-1.  **Valin, J. M. (2018)** - *RNNoise: Learning Noise Suppression*.
-2.  **Schröter, H., et al. (2022)** - *DeepFilterNet: A Low-Complexity Speech Enhancement Framework*.
-3.  **Standard DSP Theory** - *Short-Time Fourier Transform and Signal Reconstruction*.
+
+1. **Indian Sign Language Research and Training Centre (ISLRTC)** - ISL Standards.
+2. **Zhang, C., et al. (2020)** - *Mediapipe: A framework for building perception pipelines*.
+3. **HCI in Accessibility** - Research on gesture-based communication interfaces.
+
+© 2026 / Yashvardhan Singh
