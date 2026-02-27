@@ -51,20 +51,20 @@ const social = [
 
 const home = {
   label: "Home",
-  title: `${person.name} | Robotics & Physical AI`,
-  description: `Portfolio of ${person.name} — Robotics, Applied AI & Systems Engineering`,
-  headline: <>Engineering Reliable Physical AI for Aging Infrastructure.</>,
+  title: `${person.name} | Robotics, AI & Systems`,
+  description: `Portfolio of ${person.name} — Robotics Engineering, Applied AI, and System Design`,
+  headline: <>Because “It Should Work” Isn’t a Strategy.</>,
   subline: (
     <>
-      Co-founder at Osocius Dynamics, building robotics and sensor-driven systems 
-      for connected aging environments.  
-      My work focuses on embedded intelligence, safety-aware control architectures, 
-      and predictable system behavior under real-world uncertainty.
+      I’m Yashvardhan — a robotics systems engineer and Co-Founder of Osocius Dynamics, 
+      where I build physical AI systems for real-world aging environments.
+
+      I care about predictable behavior, clean architectures, and systems that don’t fall apart outside the lab. 
+      My work spans robotics engineering, embedded intelligence, optimization algorithms, 
+      and the occasional experiment just to see how far something can be pushed.
     </>
   ),
-};
-
-const about = {
+};const about = {
   label: "About",
   title: "About me",
   description: `${person.name} — Robotics Systems Engineer from ${person.location}`,
