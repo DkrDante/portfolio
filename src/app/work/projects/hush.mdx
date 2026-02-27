@@ -36,7 +36,7 @@ The objective was to create an accessible, browser-based tool that provides a vo
 Hush follows a streamlined computer vision pipeline to ensure low-latency interaction:
 
 1. **Input Layer:** High-frequency video capture from the user's webcam.
-2. **Landmark Extraction:** MediaPipe isolates the skeletal structure of the hands, extracting $x, y, z$ coordinates for 21 key points.
+2. **Landmark Extraction:** MediaPipe isolates the skeletal structure of the hands, extracting (x, y, z) coordinates for 21 key points.
 
 3. **Feature Mapping:** Normalizing landmark coordinates to ensure accuracy regardless of hand distance from the camera.
 4. **Gesture Classification:** A neural network architecture (CNN/LSTM) identifies the specific ISL sign based on spatial orientation.
