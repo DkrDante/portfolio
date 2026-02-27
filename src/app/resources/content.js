@@ -8,7 +8,7 @@ const person = {
   },
   role: "Robotics Systems Engineer & Co-Founder, Osocius Dynamics",
   avatar: "/images/avatar-01.jpeg",
-  location: "Chennai, India",
+  location: "Asia/Kolkata",
   languages: ["English", "Hindi"],
 };
 
