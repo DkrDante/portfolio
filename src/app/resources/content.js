@@ -6,28 +6,27 @@ const person = {
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Full Stack Developer",
+  role: "Robotics Systems Engineer & Co-Founder, Osocius Dynamics",
   avatar: "/images/avatar-01.jpeg",
-  location: "Asia/Kolkata",
+  location: "Chennai, India",
   languages: ["English", "Hindi"],
 };
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
+  title: <>Engineering & Research Notes by {person.firstName}</>,
   description: (
     <>
-      Stay Ahead with <InlineCode>AI, Tech and CUBING!</InlineCode>
-      Subscribe to my newsletter for insights on Machine Learning, the latest tech trends, and discoveries from my learning journey. Get fresh ideas straight to your inbox!
-
+      Practical insights on <InlineCode>Robotics Engineering</InlineCode>,{" "}
+      <InlineCode>Applied AI</InlineCode>,{" "}
+      <InlineCode>Optimization Systems</InlineCode>, and{" "}
+      <InlineCode>DSA in C++</InlineCode>.  
+      I document what I build, test, optimize, and research.
     </>
   ),
 };
 
 const social = [
-  // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
-  //
   {
     name: "GitHub",
     icon: "github",
@@ -39,9 +38,9 @@ const social = [
     link: "https://www.linkedin.com/in/dkrdante",
   },
   {
-    name: "X",
-    icon: "x",
-    link: "https://x.com/DkrDante",
+    name: "Osocius Dynamics",
+    icon: "globe",
+    link: "https://osodyn.in",
   },
   {
     name: "Email",
@@ -52,21 +51,23 @@ const social = [
 
 const home = {
   label: "Home",
-  title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Full-Stack Developer AI/ML Engineer Tech Junkie
-</>,
+  title: `${person.name} | Robotics & Physical AI`,
+  description: `Portfolio of ${person.name} — Robotics, Applied AI & Systems Engineering`,
+  headline: <>Engineering Reliable Physical AI for Aging Infrastructure.</>,
   subline: (
     <>
-     I’m Yashvardhan, a full-stack developer who builds AI systems, weird projects, and the occasional research experiment. I train machine learning models to find patterns in messy data—or to beat games I’m terrible at.
-After hours, I’m usually speed-cubing or obsessing over something new I just decided to learn.</>
+      Co-founder at Osocius Dynamics, building robotics and sensor-driven systems 
+      for connected aging environments.  
+      My work focuses on embedded intelligence, safety-aware control architectures, 
+      and predictable system behavior under real-world uncertainty.
+    </>
   ),
 };
 
 const about = {
   label: "About",
   title: "About me",
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `${person.name} — Robotics Systems Engineer from ${person.location}`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -78,35 +79,69 @@ const about = {
     display: true,
     link: "https://cal.com",
   },
+
   intro: {
     display: true,
     title: "Introduction",
     description: (
       <>
-Yashvardhan is an Indian full stack developer and AI engineer who focuses on building intelligent, reliable systems. His work spans web platforms, machine learning applications, and research-driven solutions at the intersection of software and real-world problems.
+        I am a robotics-focused systems engineer specializing in physical AI systems 
+        designed for real-world deployment.
+
+        As Co-Founder of Osocius Dynamics, I work on intelligent robotic and 
+        sensor-driven systems built specifically for aging and assisted-care environments.  
+        My engineering approach prioritizes reliability, safety, determinism, 
+        and measurable performance over prototype demonstrations.
+
+        My background spans machine learning, evolutionary optimization (CMA-ES), 
+        real-time system design, and full-stack architectures for intelligent platforms.
       </>
     ),
   },
+
   work: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Work Experience",
     experiences: [
       {
+        company: "Osocius Dynamics",
+        timeframe: "2025 - Present",
+        role: "Co-Founder | Robotics Systems Engineering",
+        achievements: [
+          <>
+            Co-founded a robotics engineering company developing physical AI systems 
+            for connected aging environments.
+          </>,
+          <>
+            Designing embedded intelligence architectures that ensure predictable, 
+            safe, and consistent robotic behavior in domestic and assisted-care settings.
+          </>,
+          <>
+            Developing sensor-fusion pipelines and reliability-first control systems 
+            optimized for real-world uncertainty.
+          </>,
+          <>
+            Leading R&D in applied AI for dependable automation infrastructure 
+            supporting aging populations.
+          </>,
+        ],
+        images: [],
+      },
+      {
         company: "ZVIA",
-        timeframe: "February '24 - October '24 ",
+        timeframe: "Feb 2024 - Oct 2024",
         role: "Technical Lead",
         achievements: [
           <>
-            Full Stack Developer crafted intuitive user experiences for school and college students. Including recreation of retro games such as Pacman and Breakout,
-            Led a team of developers to work on project as collaborative board for brainstorming and collaboration.
-
+            Led frontend and systems architecture for collaborative educational platforms 
+            and interactive learning systems.
           </>,
           <>
-            Led a team of Developer to work on project as colaborative board for brainstorming and collaboration.
+            Managed a small engineering team, improved engineering workflows, 
+            and optimized performance across multiple applications.
           </>,
         ],
         images: [
-          // optional: leave the array empty if you don't want to display images
           {
             src: "/images/projects/project-01/cover-01.png",
             alt: "ZVIA",
@@ -116,153 +151,90 @@ Yashvardhan is an Indian full stack developer and AI engineer who focuses on bui
         ],
       },
       {
-        company: "Influencer Management",
-        timeframe: "2019 - 2022",
-        role: "Freelancer",
+        company: "Voice It",
+        timeframe: "2023",
+        role: "Operations & HR Management",
         achievements: [
           <>
-            Developed a content strategy that increased engagement across multiple social media platforms,
-            ensuring a consistent brand voice for the Influencer.
+            Coordinated operations and hiring processes, improving workflow 
+            efficiency and team structure.
           </>,
-          <>
-            Paved a different path for the brand strategy by studying the market and making suggested changes in the content to help find their niche         </>,
         ],
         images: [],
       },
     ],
   },
+
   studies: {
-    display: true, // set to false to hide this section
-    title: "Studies",
+    display: true,
+    title: "Education",
     institutions: [
       {
         name: "Vellore Institute of Technology",
-        description: <>Studied Computer Science with specialisation in Artificial Intelligence and Robotics.</>,
-      },
-      {
-        name: "Delhi Public School, Varanasi",
-        description: <>Completed my +2</>,
+        description: (
+          <>
+            B.Tech in Computer Science (AI & Robotics).  
+            Focused on Machine Learning, Optimization Algorithms, 
+            Systems Programming, and Intelligent Automation.
+          </>
+        ),
       },
     ],
   },
+
   technical: {
-    display: true, // set to false to hide this section
-    title: "Technical Skills",
+    display: true,
+    title: "Technical Expertise",
     skills: [
       {
-        title: "C++",
-        description: <>Main programming language I use C++ for college work and Competitive Programming </>,
+        title: "Robotics Systems Engineering",
+        description: <>Sensor fusion, control systems, real-time decision pipelines, and reliability-focused architecture design.</>,
       },
       {
-        title: "Python",
-        description: <>Developing AI/ML models, backend services, and automation scripts.</>,
+        title: "Embedded Intelligence",
+        description: <>On-device inference, constrained compute environments, deterministic system behavior.</>,
       },
       {
-        title: "Machine Learning",
-        description: <>Building and deploying ML models for real-world applications and AI-driven systems.</>,
+        title: "Safety-Critical AI",
+        description: <>Designing AI systems with predictable outputs, failure-mode awareness, and real-world robustness.</>,
       },
       {
-        title: "Full-Stack Development",
-        description: <>Creating scalable web applications using modern frameworks and technologies.</>,
+        title: "Optimization Algorithms",
+        description: <>CMA-ES, parameter variation studies, benchmarking, and simulation-driven validation.</>,
       },
       {
-        title: "AI Integration",
-        description: <>Integrating AI systems and forcing them to do exactly what I want.</>,
+        title: "C++ & Systems Programming",
+        description: <>Primary language for performance-critical systems, DSA, and algorithmic design.</>,
       },
-
+      {
+        title: "Applied Machine Learning",
+        description: <>Computer vision, speech processing (Whisper), and production-ready ML integration.</>,
+      },
+      {
+        title: "Full-Stack Architectures",
+        description: <>MERN stack, real-time APIs, authentication systems, and scalable backend infrastructure.</>,
+      },
     ],
   },
 };
 
 const blog = {
   label: "Blog",
-  title: "Thoughts on Design and Tech...",
-  description: `Read what ${person.name} has been up to recently`,
+  title: "Engineering & Research Notes",
+  description: `Deep dives into robotics systems, applied AI, optimization, and software engineering.`,
 };
 
 const work = {
-  label: "Work",
-  title: "My projects",
-  description: `Design and dev projects by ${person.name}`,
+  label: "Projects",
+  title: "Selected Projects",
+  description: `Robotics systems, AI engines, and intelligent platforms built by ${person.name}`,
 };
 
 const gallery = {
   label: "Gallery",
-  title: "My photo gallery",
-  description: `A photo collection by ${person.name}`,
-  // Images from https://pexels.com
-  images: [
-    {
-      src: "/images/gallery/img-01.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-02.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-03.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-04.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-05.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-06.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-07.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-08.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-09.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-10.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-11.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-12.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-13.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-14.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-  ],
+  title: "Lab & Engineering Snapshots",
+  description: `A visual collection of engineering work and systems experimentation by ${person.name}`,
+  images: [],
 };
 
 export { person, social, newsletter, home, about, blog, work, gallery };
