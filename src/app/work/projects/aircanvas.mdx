@@ -1,0 +1,146 @@
+---
+title: "Air Canvas – Gesture-First Human Computer Interaction"
+publishedAt: "2025-03-08"
+summary: "A computer vision powered gesture-based drawing system built using MediaPipe and OpenCV, featuring multi-hand tracking, real-time canvas manipulation, and advanced gesture recognition."
+images:
+  - "/images/projects/air-canvas-pro/cover.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Software Engineer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Case Study: Building Air Canvas Pro v4 Using Computer Vision and Gesture Recognition
+
+---
+
+## Introduction
+
+Air Canvas Pro is a **gesture-driven drawing system** that transforms hand movements into a fully interactive digital canvas. Using real-time hand tracking, the system enables users to draw, erase, pan, undo, redo, and manipulate tools without touching a keyboard or mouse.
+
+### Core Technologies Used
+
+* **OpenCV:** Image processing and rendering.
+* **MediaPipe Hands:** Real-time multi-hand tracking.
+* **NumPy:** High-performance numerical computation.
+* **Python:** The core development backbone.
+
+The goal was not simply to detect gestures, but to engineer a stable, intuitive, and production-grade gesture-first interaction model.
+
+---
+
+## System Architecture Overview
+
+The system is structured as a modular pipeline operating in real time:
+
+1. **Input Layer:** Captures webcam feed and preprocesses frames.
+2. **Perception Layer:** Uses MediaPipe to extract 21 3D landmarks per detected hand.
+3. **Gesture Interpretation Layer:** Applies deterministic rule-based classification for robust recognition.
+4. **Rendering Layer:** Manages infinite canvas drawing, UI overlays, and state updates using OpenCV.
+
+---
+
+## Problem Definition
+
+The objective was to design a gesture-first drawing interface that:
+
+* Eliminates reliance on mouse or keyboard input.
+* Avoids accidental gesture activation (the "Midas Touch" problem).
+* Supports multi-hand interaction and feels responsive.
+* Maintains undo/redo reliability and scales performance.
+
+The core challenge was making gesture recognition **robust, intentional, and predictable**.
+
+---
+
+## Gesture System Design
+
+Air Canvas Pro uses deterministic gesture logic rather than simple ML classification to ensure precision and full control over interaction states.
+
+### Core Gestures
+
+| Gesture | Action |
+| :--- | :--- |
+| Index finger + Pinch | **Draw** |
+| Index + Middle + Pinch | **Erase** |
+| Open palm + Pinch | **Pan** |
+| Open palm + Swipe Left | **Undo** |
+| Open palm + Swipe Right | **Redo** |
+| Fist (2 sec hold) | **Clear Canvas** |
+| Two hands spread/squeeze | **Adjust Brush Size** |
+| Hover + Pinch (Sidebar) | **UI Click** |
+
+### Design Constraints Implemented
+
+To prevent accidental triggers:
+
+* **Pinch exclusivity:** Pinch only activates drawing-related actions.
+* **Mode Locks:** Tool switching is disabled during an active pinch.
+* **Deliberate Destruction:** "Clear Canvas" requires a deliberate 2-second fist hold with a visual progress bar.
+* **Temporal Filters:** Swipe gestures use cooldown timers to prevent "double-triggering."
+
+---
+
+## Technical Implementation
+
+### 1. Hand Landmark Tracking
+
+MediaPipe provides 21 landmarks. From these, the system computes finger extension states. A finger is considered extended if the tip's y-coordinate is less than the pip-joint's y-coordinate ($y_{tip} < y_{pip}$).
+
+### 2. Pinch Detection and Smoothing
+
+Pinch detection incorporates temporal smoothing to reduce jitter:
+
+* Maintain a buffer of the last $N$ pinch distances.
+* Compute a moving average.
+* Apply a threshold comparison for state switching.
+
+### 3. Infinite Canvas Architecture
+
+The system implements a world-space canvas:
+
+* **Resolution:** Set to 3× the screen size.
+* **Offsets:** `pan_x` and `pan_y` variables maintain the viewport position.
+* **Rendering:** Utilizes `cv2.addWeighted()` for transparent UI overlays and smooth compositing.
+
+### 4. Undo / Redo Stack Mechanism
+
+A two-stack architecture manages state:
+
+* **Action:** New action $\rightarrow$ push state to `undo_stack`.
+* **Undo:** Pop `undo_stack`, push to `redo_stack`.
+* **Redo:** Pop `redo_stack`, push back to `undo_stack`.
+* *Note: Stack size is capped at 20 states to prevent memory overflow.*
+
+---
+
+## Stability and Performance Optimizations
+
+To maintain real-time responsiveness ($>30$ FPS):
+
+* **Cursor Smoothing:** Mean filter applied to fingertip coordinates.
+* **Velocity Thresholding:** Swipes are only registered if the hand speed exceeds a specific pixels-per-frame limit.
+* **Snapshot Logic:** Storage is triggered only at the start/end of an action rather than every frame.
+
+---
+
+## Conclusion
+
+Air Canvas Pro demonstrates how deterministic gesture recognition combined with real-time computer vision can create a reliable alternative input system. It bridges the gap between raw computer vision data and meaningful human-computer interaction (HCI).
+
+### Future Work
+
+* Replace rule-based logic with CNN-based classification for complex poses.
+* Pressure simulation via pinch intensity estimation.
+* Multi-layer canvas support and SVG export.
+* Handwriting recognition integration.
+
+---
+
+## References
+
+1. **MediaPipe Documentation** - Google Open Source.
+2. **OpenCV Official Documentation** - Library Reference.
+3. **Nielsen, J. (1994)** - *Usability Engineering Principles*.
+4. **Wobbrock, J. O. (2009)** - *User-defined Gestures for Surface Computing*.

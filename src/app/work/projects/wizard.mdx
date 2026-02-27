@@ -1,0 +1,214 @@
+---
+title: "Wizard Touch — Designing a Real-Time Sigil Recognition Combat System"
+publishedAt: "2026-02-28"
+summary: "A browser-based real-time spellcasting game that uses geometric gesture recognition instead of button inputs, built entirely with Canvas and deterministic algorithms."
+images:
+  - "/images/projects/wizard-touch/cover.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Software Engineer"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Case Study: Wizard Touch — Sigil Slayer
+
+## Introduction
+
+Wizard Touch — Sigil type game that is inspired from the mobile game with the same title "Wizard touch", It's a RT browser combat game where players cast spells by drawing geometric sigils instead of pressing buttons.
+
+The core objective was to design a deterministic gesture recognition engine capable of identifying hand-drawn symbols in real time without using machine learning libraries.
+
+The result is a skill driven spellcasting system that combines geometry, game state architecture, and procedural visual effects.
+
+---
+
+## Problem Definition
+
+Traditional games rely on key inputs for attacks. This project required replacing discrete button presses with freehand gesture recognition.
+
+The system needed to:
+
+- Capture continuous stroke input.
+- Normalize drawings across screen sizes.
+- Recognize multiple geometric patterns reliably.
+- Validate with tolerance for imperfect drawing.
+- Execute combat logic instantly.
+
+All under real-time constraints.
+
+---
+
+## System Architecture
+
+The game is divided into five primary subsystems:
+
+### 1. Rendering Engine (Canvas-Based)
+
+- `battle-canvas` — Arena, enemies, wizard
+- `draw-canvas` — Player gesture input
+- `vfx-canvas` — Spell animations
+- `pcanvas` — Global particle system
+
+The entire rendering pipeline is built using HTML5 Canvas and `requestAnimationFrame`.
+
+---
+
+### 2. Sigil Recognition Engine
+
+Instead of ML, the system uses geometric heuristics.
+
+#### Preprocessing Pipeline
+
+1. Normalize points into a bounded box.
+2. Resample stroke into fixed-length segments.
+3. Compute angle vectors between segments.
+4. Measure total rotation.
+5. Detect corners via curvature spikes.
+
+Each sigil has its own validation rule.
+
+| Sigil | Recognition Strategy |
+|--------|----------------------|
+| Circle | Low radial variance + high rotation |
+| Triangle | ≥2 corners + bounded rotation |
+| Zigzag | Direction reversals |
+| Cross | Strong horizontal and vertical span |
+| Spiral | High accumulated rotation |
+| Infinity | Alternating curvature signs |
+
+This deterministic approach ensures low latency and consistent performance.
+
+---
+
+## Combat System
+
+Each enemy defines:
+
+- Required sigil
+- HP
+- Speed scaling
+- Gold reward
+- Boss modifiers
+
+### Combat Flow
+
+1. Player draws sigil.
+2. Validation occurs.
+3. If correct:
+   - Damage applied
+   - Knockback triggered
+   - Combo multiplier increases
+   - Visual effects activated
+4. If incorrect:
+   - Combo resets
+   - Enemy advances
+
+Bosses introduce additional mechanics such as regeneration and sigil mutation mid-fight.
+
+---
+
+## Upgrade & Relic System
+
+The shop includes:
+
+### Passive Upgrades
+- Double damage
+- Enemy slow
+- Combo persistence
+- Shield block
+- Gold multiplier
+
+### Relics
+- Life restoration chance
+- Poison application
+- Gold triggers
+- Wave-based bonuses
+
+### Potions
+- Freeze enemy
+- Time slow
+- Instant heal
+- Gold injection
+
+All upgrades are stored using `Set()` collections for O(1) lookups during combat.
+
+---
+
+## Event System
+
+Dynamic arena events include:
+
+- Gold Rain
+- Kill Frenzy
+- Slow Field
+- Boss Warning
+
+Events modify combat state temporarily using timers and conditional modifiers in the main loop.
+
+---
+
+## Visual Effects System
+
+Spells generate:
+
+- Rotating magic circles
+- Elemental beams
+- Procedural particles
+- Status effects
+
+Particles decay over time using life-based cleanup to maintain performance.
+
+---
+
+## Performance Strategy
+
+Key optimizations:
+
+- No third-party engines
+- Manual delta-time scaling
+- Controlled particle lifecycles
+- No heavy allocations inside loops
+- Deterministic gesture validation
+
+The game remains responsive even during boss-level visual effects.
+
+---
+
+## Design Philosophy
+
+The project avoids:
+
+- WebGL
+- ML-based recognition
+- Third-party engines
+
+It emphasizes:
+
+- Algorithmic problem solving
+- Deterministic geometry
+- Real-time systems architecture
+- UX-driven feedback loops
+
+---
+
+## Future Improvements
+
+- Online leaderboard
+- PvP spell duels
+- Gesture smoothing
+- Spell fusion mechanics
+- Procedural sigil generation
+
+---
+
+## Conclusion
+
+Wizard Touch demonstrates how deterministic geometry and structured state management can replace complex machine learning systems in constrained domains.
+
+It showcases strengths in:
+
+- Gesture recognition
+- Real-time rendering
+- Combat state design
+- Modular architecture
+- Interactive systems engineering
