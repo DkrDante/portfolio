@@ -1,12 +1,13 @@
 import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
+import "@/once-ui/styles/terminal.css";
 
 import classNames from "classnames";
 
-import { Footer, Header, RouteGuard } from "@/components";
+import { Footer, RouteGuard } from "@/components";
+import { TerminalHeader } from "@/components/TerminalHeader";
 import { baseURL, effects, style } from "@/app/resources";
 
-import { Inter } from "next/font/google";
 import { Source_Code_Pro } from "next/font/google";
 
 import { person, home } from "@/app/resources/content";
@@ -66,7 +67,7 @@ export async function generateMetadata() {
   };
 }
 
-const primary = Inter({
+const primary = Source_Code_Pro({
   variable: "--font-primary",
   subsets: ["latin"],
   display: "swap",
@@ -118,7 +119,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       )}
     >
       <ToastProvider>
-        <Column style={{ minHeight: "100vh" }} as="body" fillWidth margin="0" padding="0">
+        <Column style={{ minHeight: "100vh", background: "var(--term-bg, #080e08)" }} as="body" fillWidth margin="0" padding="0">
           <Background
             mask={{
               cursor: effects.mask.cursor,
@@ -166,14 +167,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               opacity: effects.lines.opacity as any,
             }}
           />
-          <Flex fillWidth minHeight="16"></Flex>
-          <Header />
+          <TerminalHeader />
           <Flex
             position="relative"
             zIndex={0}
             fillWidth
-            paddingY="l"
-            paddingX="l"
+            style={{ paddingTop: "80px", paddingBottom: "40px", paddingLeft: "16px", paddingRight: "16px" }}
             horizontal="center"
             flex={1}
           >

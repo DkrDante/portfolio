@@ -1,0 +1,95 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  font-family: "Source Code Pro", "JetBrains Mono", monospace;
+  font-size: 12px;
+}
+
+/* ── Title bar ── */
+.titleBar {
+  display: flex;
+  align-items: center;
+  padding: 6px 18px;
+  background: rgba(8, 10, 15, 0.96);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border-bottom: 1px solid #1c2433;
+}
+
+/* Traffic lights */
+.trafficLights {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 18px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; cursor: default; transition: filter 0.15s; }
+.dotRed    { background: #ff5f57; }
+.dotYellow { background: #febc2e; }
+.dotGreen  { background: #28c840; }
+.dot:hover { filter: brightness(1.3); }
+
+/* Window title / breadcrumb */
+.windowTitle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.promptUser  { color: #506070; font-weight: 600; }
+.promptAt    { color: #1c2433; }
+.promptHost  { color: #4fc3f7; font-weight: 600; }
+.promptColon { color: #1c2433; }
+.promptPath  { color: #7a9ab8; }
+
+/* Clock */
+.clockArea { flex-shrink: 0; margin-left: 18px; }
+.clock { color: #2a3a4a; font-size: 11px; letter-spacing: 0.06em; }
+
+/* ── Nav bar ── */
+.navBar {
+  display: flex;
+  align-items: center;
+  padding: 2px 18px;
+  background: rgba(6, 8, 13, 0.95);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid #131e2b;
+  gap: 4px;
+}
+
+.navPrefix { color: #1c2433; user-select: none; margin-right: 6px; font-size: 11px; }
+.navLinks  { display: flex; gap: 1px; }
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 12px;
+  color: #3d5060;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 1px;
+  transition: all 0.14s ease;
+  letter-spacing: 0.01em;
+}
+.navLink:hover {
+  color: #7a9ab8;
+  background: rgba(79, 195, 247, 0.04);
+  border-color: rgba(79, 195, 247, 0.08);
+}
+.navActive {
+  color: #4fc3f7 !important;
+  background: rgba(79, 195, 247, 0.07) !important;
+  border-color: rgba(79, 195, 247, 0.2) !important;
+}
+.navCmd { color: #243040; font-weight: 600; font-size: 10.5px; letter-spacing: 0.03em; }
+
+@media (max-width: 600px) {
+  .titleBar { padding: 5px 12px; }
+  .navBar   { padding: 2px 12px; }
+  .promptHost, .promptPath { display: none; }
+}
