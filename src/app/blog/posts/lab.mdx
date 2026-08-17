@@ -9,42 +9,36 @@ tag: "Engineering"
 
 # The Lab Is a Lie
 
-Most robotic systems look smart  
-because the environment is cooperating.
+Most robotic systems look smart because the environment is cooperating with them. Good lighting. Silence. Clear inputs. A user facing the camera at a sensible distance, saying things clearly, one at a time, like a well-behaved test subject. Reality doesn't behave like that, and it never asked to.
 
-Good lighting.  
-Silence.  
-Clear inputs.
+We found this out the fun way — by taking something that worked beautifully in the lab and putting it in an actual living room.
 
-Reality doesn’t behave like that.
+### Everything Was Great, Right Up Until It Wasn't
 
-If a system only works when conditions are perfect,  
-it doesn’t really work.
+In the lab, Nomi was sharp. Clean visuals, no background noise, a single person standing in the ideal spot we'd unconsciously trained ourselves to stand in every single test run. It responded fast, understood everything, felt genuinely impressive. We were proud of it, in that specific way where you start assuming the hard part is basically done.
 
-For Nomi, the happy path is easy.  
-Clean visuals.  
-No background noise.  
-User facing the camera.
+Then we moved the same setup into a real apartment for a pilot session. Same hardware. Same software. Completely different result. The TV was on in the background. Someone had the blinds half-drawn, throwing weird directional light across the room. A kid was somewhere off-camera being a kid. And the system that had felt so confident an hour earlier suddenly started second-guessing basic inputs, like it had never seen a living room before — which, in a sense, it hadn't. It had only ever seen our very tidy approximation of one.
 
-That’s not where it lives.
+That was a genuinely humbling afternoon. If a system only works when conditions are perfect, it doesn't really work — it just works in the one place we happened to build it.
 
-It lives in homes.
+### Redefining "Functional"
 
-TVs running.  
-Lights changing.  
-Rooms cluttered.  
-Sound bouncing off everything.
+The fix wasn't a better lab. The fix was admitting the lab was never the point. For Nomi, the happy path — clean visuals, no noise, a cooperative user facing the camera — was never where it needed to live. It lives in homes: TVs running, lights changing throughout the day, rooms cluttered with the actual chaos of people actually living in them, sound bouncing off every hard surface in the room.
 
-So we define “functional” using worst-case environments,  
-not best-case ones.
+So we changed the definition of "functional" entirely. Instead of asking "does it work under good conditions," we started asking "does it work under the worst conditions we can reasonably expect" — and then testing against *that* bar instead of the comfortable one.
 
-If a companion fails when the room is dark  
-or when a vacuum cleaner is running,  
-it stops feeling like a companion.  
-It starts feeling like a fragile gadget.
+**What actually changed once we did this:**
 
-Robustness isn’t something you add later.  
-It’s the baseline.
+- We stopped trusting any result recorded under lab lighting and started deliberately testing in bad lighting, because bad lighting is where people's homes actually live half the year.
+- We started running a vacuum cleaner, a TV, or a podcast in the background during every review session, on purpose, because silence was never a realistic baseline.
+- We stopped assuming the user faces the camera, because people don't — they talk over their shoulder, they walk around, they multitask.
 
-We don’t build for controlled conditions.  
-We build for the world as it is.
+### Disaster Story
+
+During one of those messier test sessions, we discovered the system was quietly treating a TV commercial's background music as a voice command trigger roughly one time in twenty — rare enough to sail through every quiet-lab test we'd run, common enough to be genuinely annoying in a real home with a TV on for six hours a day. It's the kind of bug you will never, ever find by making your test environment nicer. You only find it by making your test environment worse, on purpose, before your users do it for you.
+
+### Robustness Isn't a Later Problem
+
+If a companion fails when the room is dark, or when a vacuum cleaner is running, or when the light is coming from the wrong direction, it stops feeling like a companion. It starts feeling like a fragile gadget that only works when you set the stage for it — and nobody wants to babysit their own robot.
+
+Robustness isn't something you bolt on once the "real" features are finished. It's the baseline the real features get built on top of. We don't build for controlled conditions anymore. We build for the world as it actually is — messy, loud, badly lit, and completely uninterested in making our jobs easier.

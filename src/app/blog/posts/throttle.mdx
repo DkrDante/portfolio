@@ -9,39 +9,36 @@ tag: "Engineering"
 
 # Why We Throttle Our Own AI
 
-Most autonomous systems are pushed to be faster.  
-Lower latency.  
-Snappier reactions.  
-Better-looking demos.
+Most autonomous systems are pushed to be faster. Lower latency. Snappier reactions. Better-looking demos. Every benchmark chart in this industry has an arrow pointing down and to the right, and everyone wants to be the arrow. That obsession makes sense in software, where "faster" is basically always "better." It breaks down the moment your software has to move something in the real world.
 
-That works in software.
+We learned this one the annoying way, watching Nomi in the lab.
 
-It breaks down in physical systems.
+### The Day We Chased a Number We Shouldn't Have
 
-We had to choose between minimizing latency and minimizing variance.  
-Speed versus consistency.
+For a stretch, one of our internal goals was shaving milliseconds off response time. Every sprint, a little faster. Every sprint, a slightly better number to put in a slide. And technically, we were winning — average response time kept dropping, and on paper the system looked more capable every week.
 
-For Nomi, consistency wins.
+Then we started actually watching people interact with it instead of watching the dashboard. The reactions were fast, sure, but *inconsistently* fast — snappy nine times, then a beat of hesitation on the tenth for reasons buried somewhere in a scheduler we didn't fully control. And that tenth time is the one people remember. Nobody walks away thinking "wow, 90% of that was instant." They walk away thinking "it froze for a second, is it broken?"
 
-Erratic speed feels unsafe.  
-Stable delay feels intentional.
+That's when it clicked: we'd been optimizing the wrong axis entirely.
 
-A companion that reacts instantly most of the time  
-but hesitates occasionally  
-feels broken.
+### Speed Versus Consistency Isn't a Tradeoff You Get to Skip
 
-A companion that reacts slightly slower  
-but always the same  
-feels reliable.
+We had to choose between minimizing latency and minimizing variance — speed versus consistency — and for a companion product like Nomi, consistency wins, full stop.
 
-So we deliberately deprioritize raw execution speed  
-in favor of deterministic behavior.
+Erratic speed feels unsafe, even when it's technically fast on average. A companion that reacts instantly most of the time but hesitates occasionally doesn't read as "impressive with the occasional hiccup." It reads as broken, because humans are extremely good at pattern-matching on rhythm and extremely bad at forgiving broken rhythm. A companion that reacts slightly slower but *always the same* reads as reliable, even though the raw numbers say it's "worse."
 
-Users adapt to rhythm.  
-They don’t adapt to randomness.
+So we deliberately deprioritize raw execution speed in favor of deterministic behavior. Concretely, that meant:
 
-In deep-tech hardware, trust doesn’t come from being fast.  
-It comes from being predictable.
+- Capping how fast certain response paths are *allowed* to be, so the fast case and the slow case converge to roughly the same felt timing.
+- Treating jitter, not average latency, as the metric that actually gets a red flag in review.
+- Being willing to report a slower average number externally if it means the worst case and the best case stop being noticeably different.
 
-At Osocius Dynamics, we don’t optimize for impressive numbers.  
-We optimize for knowing what happens next.
+That last one is a hard sell in a room full of engineers who were trained their whole careers to make numbers go down. I get it — I was one of the people arguing to keep chasing raw speed. It took watching someone flinch at an inconsistent reaction, in person, to actually change my mind. Dashboards don't flinch. People do.
+
+### Users Adapt to Rhythm, Not to Randomness
+
+Give someone a system with a consistent, even slightly slower, cadence, and within minutes they stop noticing the delay entirely — it becomes part of the interaction's texture, like the read-receipt delay on a messaging app. Give them a system with randomized timing and they never fully relax around it, no matter how fast it gets on its best day. You can't out-optimize that instinct with better hardware. You have to design around it.
+
+In deep-tech hardware, trust doesn't come from being fast. It comes from being predictable — from the system doing roughly the same thing, in roughly the same way, every single time you interact with it.
+
+At Osocius Dynamics, we don't optimize for impressive benchmark numbers anymore. We optimize for knowing what happens next — which, it turns out, is a much harder and much more interesting engineering problem than just making things faster.
