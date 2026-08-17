@@ -17,11 +17,11 @@ const protectedRoutes = {
 const style = {
   theme: "dark", // dark | light
   neutral: "slate", // sand | gray | slate
-  brand: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  accent: "violet", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  solid: "contrast", // color | contrast
+  brand: "cyan", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  solid: "color", // color | contrast
   solidStyle: "flat", // flat | plastic
-  border: "rounded", // rounded | playful | conservative
+  border: "conservative", // rounded | playful | conservative
   surface: "translucent", // filled | translucent
   transition: "all", // all | micro | macro
 };

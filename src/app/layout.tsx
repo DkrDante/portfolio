@@ -7,6 +7,7 @@ import { Footer, Header, RouteGuard } from "@/components";
 import { baseURL, effects, style } from "@/app/resources";
 
 import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import { Source_Code_Pro } from "next/font/google";
 
 import { person, home } from "@/app/resources/content";
@@ -72,18 +73,17 @@ const primary = Inter({
   display: "swap",
 });
 
-type FontConfig = {
-  variable: string;
-};
+const secondary = Space_Grotesk({
+  variable: "--font-secondary",
+  subsets: ["latin"],
+  display: "swap",
+});
 
-/*
-	Replace with code for secondary and tertiary fonts
-	from https://once-ui.com/customize
-*/
-const secondary: FontConfig | undefined = undefined;
-const tertiary: FontConfig | undefined = undefined;
-/*
- */
+const tertiary = Source_Code_Pro({
+  variable: "--font-tertiary",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const code = Source_Code_Pro({
   variable: "--font-code",
