@@ -267,32 +267,28 @@ const home = {
     title: "Technical Expertise",
     skills: [
       {
-        title: "Robotics Systems Engineering",
-        description: <>Sensor fusion, control systems, real-time decision pipelines, and reliability-focused architecture design.</>,
+        title: "Machine Learning & AI",
+        description: <>Applied machine learning, neural networks, computer vision, speech processing, and intelligent system development.</>,
       },
       {
-        title: "Embedded Intelligence",
-        description: <>On-device inference, constrained compute environments, deterministic system behavior.</>,
+        title: "AI Engineering & MLOps",
+        description: <>Model integration, inference pipelines, experimentation, Docker, deployment workflows, and production-oriented ML systems.</>,
       },
       {
-        title: "Safety-Critical AI",
-        description: <>Designing AI systems with predictable outputs, failure-mode awareness, and real-world robustness.</>,
+        title: "Software & Systems Engineering",
+        description: <>C++, Python, backend architecture, APIs, databases, real-time systems, and performance-focused engineering.</>,
       },
       {
-        title: "Optimization Algorithms",
-        description: <>CMA-ES, parameter variation studies, benchmarking, and simulation-driven validation.</>,
+        title: "Full-Stack Development",
+        description: <>React, Next.js, Node.js, REST APIs, PostgreSQL, authentication, and real-time applications.</>,
       },
       {
-        title: "C++ & Systems Programming",
-        description: <>Primary language for performance-critical systems, DSA, and algorithmic design.</>,
+        title: "Robotics & Physical AI",
+        description: <>ROS, sensor-driven systems, real-time decision pipelines, and applying AI to physical environments.</>,
       },
       {
-        title: "Applied Machine Learning",
-        description: <>Computer vision, speech processing (Whisper), and production-ready ML integration.</>,
-      },
-      {
-        title: "Full-Stack Architectures",
-        description: <>MERN stack, real-time APIs, authentication systems, and scalable backend infrastructure.</>,
+        title: "Research & Experimental Computing",
+        description: <>AI research, quantitative experimentation, benchmarking, and exploration of unconventional approaches to intelligent systems.</>,
       },
     ],
   },
