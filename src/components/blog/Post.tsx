@@ -48,7 +48,7 @@ export default function Post({ post, thumbnail }: PostProps) {
             {formatDate(post.metadata.publishedAt, false)}
           </Text>
           {post.metadata.tag && (
-            <Tag className="mt-8" label={post.metadata.tag} variant="neutral" />
+            <Tag className="mt-8" label={post.metadata.tag} variant="accent" />
           )}
         </Column>
       </Flex>
