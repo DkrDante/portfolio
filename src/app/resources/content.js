@@ -85,16 +85,47 @@ const home = {
     title: "Introduction",
     description: (
       <>
-        I am a robotics-focused systems engineer specializing in physical AI systems 
-        designed for real-world deployment.
+        I build machines that have to exist outside the laptop.
 
-        As Co-Founder of Osocius Dynamics, I work on intelligent robotic and 
-        sensor-driven systems built specifically for aging and assisted-care environments.  
-        My engineering approach prioritizes reliability, safety, determinism, 
-        and measurable performance over prototype demonstrations.
+        I'm an engineer interested in the intersection of software, AI, and the
+        physical world. I like working across layers, from machine learning and
+        intelligent decision-making to robotics, real-time systems, hardware, and
+        the software infrastructure that ties everything together.
 
-        My background spans machine learning, evolutionary optimization (CMA-ES), 
-        real-time system design, and full-stack architectures for intelligent platforms.
+        A lot of my work starts with a fairly simple question:{" "}
+        <strong>
+          what happens when we take this idea out of a controlled environment
+          and make it deal with reality?
+        </strong>
+
+        That usually leads to interesting problems. Sensors are noisy. Hardware
+        has limitations. Models behave differently outside the dataset. Latency
+        suddenly matters. Systems fail in ways you didn't anticipate. And the
+        niche edge case you decided was probably never going to happen has a
+        strange habit of coming back to find you personally.
+
+        Sometimes that edge case is a user named <InlineCode>null</InlineCode>{" "}
+        trying to log into a facility while travelling across regions on a
+        train. Sometimes it's discovering that your carefully planned afternoon
+        has been defeated by <InlineCode>git rebase</InlineCode>. Either way,
+        reality remains undefeated.
+
+        That's the part I enjoy.
+
+        I've worked across full-stack engineering, machine learning, research,
+        robotics, and intelligent systems, and I'm increasingly focused on
+        bringing those pieces together into physical AI systems that can
+        actually be deployed. My work with Osocius Dynamics is one expression of
+        that, particularly around robotic and sensor-driven systems for aging
+        and assisted-care environments.
+
+        I care about understanding the entire system rather than becoming very
+        good at one isolated component. I like ambitious ideas, strange
+        technical problems, and building things simply to find out whether they
+        can actually work.
+
+        Prototypes are fun.{" "}
+        <strong>Making them survive contact with reality is more interesting.</strong>
       </>
     ),
   },
@@ -103,6 +134,55 @@ const home = {
     display: true,
     title: "Work Experience",
     experiences: [
+      {
+        company: "SatoriXR",
+        timeframe: "2026 - Present",
+        role: "Machine Learning / MLOps Engineering",
+        achievements: [
+          <>
+            Worked on machine learning infrastructure and MLOps workflows for
+            developing, deploying, and maintaining intelligent systems.
+          </>,
+          <>
+            Built and improved pipelines supporting the transition from
+            experimentation and model development toward reproducible,
+            deployable ML systems.
+          </>,
+          <>
+            Worked across model workflows, data processing, deployment
+            infrastructure, and engineering automation.
+          </>,
+          <>
+            Focused on making ML systems easier to reproduce, monitor,
+            integrate, and operate beyond the development environment.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "CRIS",
+        timeframe: "May 2026 - Present",
+        role: "Full-Stack Engineering",
+        achievements: [
+          <>
+            Developed full-stack web applications and conversational AI
+            systems for railway information systems.
+          </>,
+          <>
+            Built the frontend and backend architecture connecting
+            user-facing interfaces with intelligent conversational services.
+          </>,
+          <>
+            Worked across API integration, application logic, authentication,
+            data handling, and deployment.
+          </>,
+          <>
+            Designed the system to handle real-world user interactions rather
+            than functioning purely as a conversational AI prototype.
+          </>,
+        ],
+        images: [],
+      },
       {
         company: "Osocius Dynamics",
         timeframe: "2025 - Present",
