@@ -1,47 +1,51 @@
-"use client";
-
+import { Flex, IconButton, SmartLink, Text } from "@/once-ui/components";
 import { person, social } from "@/app/resources/content";
+import styles from "./Footer.module.scss";
 
 export const Footer = () => {
-  const year = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer style={{
-      fontFamily: "'Source Code Pro', 'JetBrains Mono', monospace",
-      fontSize: "11.5px",
-      borderTop: "1px solid #131e2b",
-      padding: "12px 24px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexWrap: "wrap",
-      gap: "10px",
-      color: "#2a3a4a",
-      background: "rgba(6,8,13,0.85)",
-      letterSpacing: "0.01em",
-    }}>
-      <span>
-        <span style={{ color: "#243040" }}>© {year}</span>
-        <span style={{ color: "#1c2433", margin: "0 8px" }}>·</span>
-        <span style={{ color: "#4fc3f7" }}>{person.name}</span>
-        <span style={{ color: "#1c2433", margin: "0 8px" }}>·</span>
-        <span style={{ color: "#2a3a4a" }}>Robotics · AI · Systems</span>
-      </span>
-      <span style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-        {social.map(s => s.link && (
-          <a
-            key={s.name}
-            href={s.link}
-            target={s.link.startsWith("mailto") ? undefined : "_blank"}
-            rel="noopener noreferrer"
-            title={s.name}
-            style={{ color: "#2a3a4a", textDecoration: "none", transition: "color 0.15s" }}
-            onMouseOver={e => (e.currentTarget.style.color = "#4fc3f7")}
-            onMouseOut={e => (e.currentTarget.style.color = "#2a3a4a")}
-          >
-            {s.name}
-          </a>
-        ))}
-      </span>
-    </footer>
+    <Flex
+      as="footer"
+      position="relative"
+      fillWidth
+      padding="8"
+      horizontal="center"
+      mobileDirection="column"
+    >
+      <Flex
+        className={styles.mobile}
+        maxWidth="m"
+        paddingY="8"
+        paddingX="16"
+        gap="16"
+        horizontal="space-between"
+        vertical="center"
+      >
+        <Text variant="body-default-s" onBackground="neutral-strong">
+          <Text onBackground="neutral-weak">© {currentYear} /</Text>
+          <Text paddingX="4">{person.name}</Text>
+          <Text onBackground="neutral-weak">
+          </Text>
+        </Text>
+        <Flex gap="16">
+          {social.map(
+            (item) =>
+              item.link && (
+                <IconButton
+                  key={item.name}
+                  href={item.link}
+                  icon={item.icon}
+                  tooltip={item.name}
+                  size="s"
+                  variant="ghost"
+                />
+              ),
+          )}
+        </Flex>
+      </Flex>
+      <Flex height="80" show="s"></Flex>
+    </Flex>
   );
 };

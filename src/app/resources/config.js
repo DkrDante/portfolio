@@ -15,26 +15,26 @@ const protectedRoutes = {
 };
 
 const style = {
-  theme: "dark",
-  neutral: "slate",
-  brand: "cyan",
-  accent: "aqua",
-  solid: "contrast",
-  solidStyle: "flat",
-  border: "conservative",
-  surface: "translucent",
-  transition: "all",
+  theme: "dark", // dark | light
+  neutral: "slate", // sand | gray | slate
+  brand: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  accent: "violet", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  solid: "contrast", // color | contrast
+  solidStyle: "flat", // flat | plastic
+  border: "rounded", // rounded | playful | conservative
+  surface: "translucent", // filled | translucent
+  transition: "all", // all | micro | macro
 };
 
 const effects = {
   mask: {
-    cursor: false,
-    x: 50,
-    y: 50,
-    radius: 100,
+    cursor: true,
+    x: 0,
+    y: 0,
+    radius: 75,
   },
   gradient: {
-    display: false,
+    display: true,
     x: 50,
     y: 0,
     width: 100,
@@ -42,13 +42,13 @@ const effects = {
     tilt: 0,
     colorStart: "brand-background-strong",
     colorEnd: "static-transparent",
-    opacity: 10,
+    opacity: 30, // Reduced opacity for subtlety
   },
   dots: {
-    display: false,
-    size: 1,
+    display: true,
+    size: 1, // Smaller dots for elegance
     color: "brand-on-background-weak",
-    opacity: 8,
+    opacity: 15, // Lower opacity for subtlety
   },
   lines: {
     display: false,
@@ -56,9 +56,9 @@ const effects = {
     opacity: 100,
   },
   grid: {
-    display: true,
+    display: true, // Enable grid for more visual interest
     color: "neutral-alpha-weak",
-    opacity: 10,
+    opacity: 30, // Low opacity for subtle background
   },
 };
 
