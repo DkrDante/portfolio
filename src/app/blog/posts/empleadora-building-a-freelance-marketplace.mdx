@@ -1,0 +1,58 @@
+---
+title: "Building Empleadora: A Fiverr-Style Marketplace for India's Gig Economy"
+publishedAt: "2025-11-17"
+summary: "What it took to ship a 7-module freelance marketplace with live payments and transactional email, and why we split it into microservices after launch."
+images:
+  - "/images/blogs/blog-01.png"
+tag: "Engineering"
+---
+
+# Building Empleadora: A Fiverr-Style Marketplace for India's Gig Economy
+
+Freelance marketplaces look simple from the outside: someone posts a job, someone else does it, money moves. Then you start building one and discover that the "money moves" part is a state machine, the "someone posts a job" part is a search problem, and the whole thing is held together by emails that must actually arrive.
+
+Empleadora is the marketplace I built for the Indian gig economy: **React, Node.js, PostgreSQL, Razorpay for payments, and AWS SES for transactional email.** This is the engineering story behind it.
+
+### Seven Modules, One Product
+
+A marketplace is really several products sharing a database. We split Empleadora into seven modules so each had a clear owner and a clear boundary:
+
+- **Auth and profiles:** sign-up, login, roles (client vs. freelancer).
+- **Gig listings:** creation, categories, search and filtering.
+- **Orders:** the lifecycle from request to delivery to completion.
+- **Payments:** checkout, confirmation, and payout bookkeeping via Razorpay.
+- **Messaging and notifications:** in-app updates plus email.
+- **Reviews and ratings:** trust signals on both sides.
+- **Admin and moderation:** the unglamorous module that keeps the rest usable.
+
+Drawing those lines early paid off. When something broke, it broke inside a module, not across the app.
+
+### Payments Are a State Machine
+
+The most important lesson: **never treat a payment as a single event.** A payment is created, authorized, captured, maybe failed, maybe refunded. Razorpay tells you about each transition through webhooks, and your database has to agree with it even when webhooks arrive late, twice, or out of order.
+
+What worked for us:
+
+- **Idempotent webhook handlers.** Processing the same event twice must be harmless.
+- **The order status is derived from verified payment events**, never from what the browser claims after redirect.
+- **Signature verification on every webhook**, with no exceptions for "internal" calls.
+
+### Emails That Actually Arrive
+
+Order confirmations, payment receipts, and delivery notices are not nice-to-haves on a marketplace. They are the product. We used **AWS SES** for transactional email, and kept sending logic behind a single notification interface so templates and triggers lived in one place instead of being scattered through route handlers.
+
+### Why We Moved to Microservices After Launch
+
+We launched as a modular monolith on purpose. It is faster to build and far easier to debug when you do not yet know where the load will land.
+
+After launch, the usage pattern told us what to split. Payments and notifications had very different scaling and failure profiles from browsing and listings, and a slow email provider should never slow down a checkout. So we refactored those concerns into **independent services** that could scale and deploy on their own.
+
+The sequence mattered: **module boundaries first, service boundaries second.** Because the monolith was already modular, extraction was mostly moving code behind a network call rather than untangling it.
+
+### What I'd Do Again (and Differently)
+
+**Again:** design the module boundaries before writing features, verify payments server-side, and put one interface in front of email.
+
+**Differently:** add observability earlier. Distributed tracing across the new services would have saved real debugging time right after the split.
+
+Empleadora taught me that the interesting engineering in a marketplace is not the CRUD. It is trust: money that moves correctly, messages that arrive, and a system whose seams are where you expect them.

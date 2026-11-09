@@ -1,0 +1,58 @@
+---
+title: "Quantum VAE for Neuroimaging — Depression Detection from Resting-State fMRI"
+publishedAt: "2026-09-15"
+summary: "Research into a Quantum Variational Autoencoder for depression detection from resting-state fMRI, benchmarked against a classical PCA+SVM baseline using PennyLane and cuQuantum on NVIDIA GPUs."
+images:
+  - "/images/projects/project-01/quantumvae.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "Researcher"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Project Report: Quantum VAE for Neuroimaging
+
+## 1. Overview
+
+This research project investigates a **Quantum Variational Autoencoder (QVAE)** for **depression detection from resting-state fMRI**, and compares it against a **classical PCA + SVM baseline**.
+
+**Stack:** PennyLane, cuQuantum on NVIDIA GPUs, fMRI data.
+
+## 2. Problem Statement
+
+Resting-state fMRI produces very high-dimensional data, while labelled clinical datasets are small. That combination is hard for learning methods: there are many features and few subjects, so models overfit easily and compact, informative representations matter a great deal.
+
+The research question: **can a quantum variational autoencoder learn a useful compressed representation of fMRI features for detecting depression, and how does it compare with a classical pipeline?**
+
+## 3. Approach
+
+### Classical Baseline: PCA + SVM
+
+The baseline reduces dimensionality with **PCA** and classifies with an **SVM**. It is simple, well understood and strong on small data, which makes it the right bar to compare against. A new method that cannot beat it is not yet justified.
+
+### Quantum VAE
+
+A variational autoencoder learns to compress inputs into a small latent space and reconstruct them. In the quantum version, a **parameterized quantum circuit** plays the role of the encoder/decoder, with its parameters trained classically through a hybrid quantum-classical loop. The learned latent representation then feeds the downstream depression classification.
+
+### Tooling
+
+- **PennyLane** defines the quantum circuits and provides differentiation for training.
+- **cuQuantum** on **NVIDIA GPUs** accelerates the quantum circuit simulation, which would otherwise be a bottleneck for iterating on circuit designs.
+
+## 4. Evaluation Plan
+
+The central design principle is a **fair comparison**: same data, same splits, same evaluation metrics for both the QVAE pipeline and the PCA+SVM baseline. With small clinical datasets, careful cross-validation is essential, and subject-level splits are needed so that data from one participant never appears in both training and test sets.
+
+## 5. Challenges and Design Considerations
+
+- **Simulation cost.** Simulating qubits scales exponentially, so circuit width is limited; GPU acceleration extends what is practical.
+- **Data size.** Small cohorts raise variance, so conclusions should be stated carefully.
+- **Input encoding.** Getting high-dimensional fMRI features into a small number of qubits requires deliberate dimensionality reduction and encoding choices.
+- **Optimization.** Variational circuits can be hard to train (for example, flat loss landscapes), so initialization and circuit depth matter.
+
+## 6. Status and Next Steps
+
+This is ongoing research. Next steps include completing the benchmark against the classical baseline, ablating circuit design choices, and testing robustness across datasets.
+
+> No performance results are reported here; add final metrics once the benchmark is complete, and avoid claims beyond what the evaluation supports.

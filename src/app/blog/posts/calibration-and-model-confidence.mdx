@@ -1,0 +1,58 @@
+---
+title: "Confidence Is Not Correctness: Calibration in Real ML Systems"
+publishedAt: "2026-07-08"
+summary: "Why softmax probabilities lie, how to measure and fix calibration, and how to use confidence to decide when a model should abstain."
+images:
+  - "/images/blogs/blog-02.png"
+tag: "Technology"
+---
+
+# Confidence Is Not Correctness: Calibration in Real ML Systems
+
+A classifier says "93% sure." What should that mean? If the model is **calibrated**, then among all predictions it labels 93%, about 93% are correct. In practice, modern neural networks are frequently overconfident: the number printed is not the frequency of being right.
+
+This matters the moment you do anything with confidence: set thresholds, route to a human, trigger a fallback, or show a score to a user.
+
+### Accuracy and Calibration Are Different Properties
+
+A model can be highly accurate and badly calibrated, or the reverse. Accuracy asks "how often is the top prediction right?" Calibration asks "do the probabilities mean what they say?" Training with cross-entropy for many epochs, large capacity and little regularization all tend to push outputs toward extreme confidence, even on inputs unlike the training data.
+
+### Measuring It
+
+- **Reliability diagram:** bin predictions by confidence, plot average confidence against actual accuracy per bin. A calibrated model hugs the diagonal; overconfident models fall below it.
+- **Expected Calibration Error (ECE):** the weighted average gap between confidence and accuracy across bins. Handy but sensitive to binning, so look at the diagram too.
+- **Proper scoring rules** such as negative log-likelihood and the Brier score, which reward honest probabilities.
+
+Always compute these on **held-out data**, never the set used for fitting the calibrator.
+
+### Fixing It, Cheaply
+
+Post-hoc calibration is often enough:
+
+- **Temperature scaling:** divide logits by a single learned scalar T before the softmax, fit on a validation set. It does not change the predicted class, only the confidence, and is surprisingly effective for neural nets.
+- **Platt scaling / isotonic regression:** fit a small mapping from scores to probabilities; isotonic is more flexible but needs more data.
+- **Training-side:** label smoothing, ensembles and regularization reduce overconfidence at the source.
+
+Re-check calibration after any change in data distribution, since a calibrator fit on yesterday's data may not hold today.
+
+### Distribution Shift Breaks Everything
+
+Calibration measured in-distribution says little about inputs the model has never seen. Overconfidence on out-of-distribution data is a well-known failure. Complement confidence with **explicit shift detection** (feature-space distance, ensemble disagreement) rather than assuming a low softmax will warn you.
+
+### Confidence in LLM Systems
+
+The same question applies to language models, with extra wrinkles. A model's fluent tone is not a probability. Options for useful signals:
+
+- **Token log-probabilities** over the answer or a constrained choice, which are informative though not guaranteed to be calibrated.
+- **Self-consistency:** sample several answers and measure agreement.
+- **Verifier or grounding checks:** is the claim supported by retrieved text?
+
+Treat each as a feature, and calibrate the combined score against labelled outcomes.
+
+### Turning Confidence Into Decisions
+
+The real value is **selective prediction**: answer when confident, abstain or escalate otherwise. Plot **accuracy versus coverage**: as you raise the threshold, accuracy on the answered subset should rise while coverage falls. Pick the operating point from the cost of an error versus the cost of a deferral, for instance a clarifying question instead of a guess. This is exactly the logic behind a fallback path in a guarded RAG system.
+
+### Takeaway
+
+Do not ship a number you have not checked. Measure calibration, fix it with a small post-hoc step, monitor it under drift, and let it drive explicit abstain-or-answer policies.

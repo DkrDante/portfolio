@@ -6,22 +6,22 @@ const person = {
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Robotics Systems Engineer & Co-Founder, Osocius Dynamics",
+  role: "AI/ML Engineer · Applied AI, MLOps & Robotics",
   avatar: "/images/avatar-01.jpeg",
   location: "Asia/Kolkata",
   languages: ["English", "Hindi"],
 };
 
+// Mailchimp action URL is still a placeholder, so the form is hidden.
+// Set a real action in config.js and flip display to true to bring it back.
 const newsletter = {
-  display: true,
+  display: false,
   title: <>Engineering & Research Notes by {person.firstName}</>,
   description: (
     <>
-      Practical insights on <InlineCode>Robotics Engineering</InlineCode>,{" "}
-      <InlineCode>Applied AI</InlineCode>,{" "}
-      <InlineCode>Optimization Systems</InlineCode>, and{" "}
-      <InlineCode>DSA in C++</InlineCode>.  
-      I document what I build, test, optimize, and research.
+      Notes on <InlineCode>LLM systems</InlineCode>, <InlineCode>MLOps</InlineCode>,{" "}
+      <InlineCode>biosignal ML</InlineCode> and <InlineCode>robotics</InlineCode>. I write about
+      what I build, break and measure.
     </>
   ),
 };
@@ -30,12 +30,22 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/dkrdante",
+    link: "https://github.com/DkrDante",
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
     link: "https://www.linkedin.com/in/dkrdante",
+  },
+  {
+    name: "X",
+    icon: "x",
+    link: "https://x.com/DkrDante",
+  },
+  {
+    name: "dev.to",
+    icon: "dev",
+    link: "https://dev.to/dkrdante",
   },
   {
     name: "Osocius Dynamics",
@@ -51,23 +61,72 @@ const social = [
 
 const home = {
   label: "Home",
-  title: `${person.name} | Robotics, AI & Systems`,
-  description: `Portfolio of ${person.name} — Robotics Engineering, Applied AI, and System Design`,
-  headline: <>Because “It Should Work” Isn’t a Strategy.</>,
+  title: `${person.name} | AI/ML Engineer, Applied AI & Robotics`,
+  description: `${person.name} builds LLM systems, ML pipelines and physical AI. Projects, research notes and engineering writing on RAG, evals, MLOps, biosignal ML and robotics.`,
+  headline: <>I build AI systems that hold up outside the notebook.</>,
   subline: (
     <>
-      I’m Yashvardhan — a robotics systems engineer and Co-Founder of Osocius Dynamics, 
-      where I build physical AI systems for real-world aging environments.
-
-      I care about predictable behavior, clean architectures, and systems that don’t fall apart outside the lab. 
-      My work spans robotics engineering, embedded intelligence, optimization algorithms, 
-      and the occasional experiment just to see how far something can be pushed.
+      I'm Yashvardhan, an AI/ML engineer working across <strong>LLM applications</strong>,{" "}
+      <strong>MLOps and automated validation</strong>, <strong>brain-signal ML</strong> and{" "}
+      <strong>robotics</strong>. Currently building conversational AI at CRIS and ML test
+      infrastructure at Satorix, and co-founding Osocius Dynamics.
     </>
   ),
-};const about = {
+  availability: "Open to collaborations on AI tooling, BCI and real-time systems",
+
+  highlights: [
+    { value: "Winner", label: "HACKSTAR 2025 hackathon" },
+    { value: "Top 5", label: "Smart India Hackathon, VIT Chennai finalist" },
+    { value: "3", label: "full-stack products shipped to production" },
+    { value: "4", label: "active research and systems projects" },
+  ],
+
+  focus: {
+    title: "What I work on",
+    items: [
+      {
+        icon: "brain",
+        title: "LLM & RAG systems",
+        description:
+          "Multi-agent pipelines with retrieval, verification and confidence-based fallback, so the model abstains instead of guessing.",
+      },
+      {
+        icon: "rocket",
+        title: "MLOps & quality engineering",
+        description:
+          "Automated validation for ML services, CI/CD that runs on every change, and load testing that finds breaking points on its own.",
+      },
+      {
+        icon: "chart",
+        title: "Biosignal & neuro ML",
+        description:
+          "EEG cognitive-state models, resting-state fMRI research and quantum VAEs, evaluated with subject-level splits and honest baselines.",
+      },
+      {
+        icon: "robot",
+        title: "Robotics & real-time systems",
+        description:
+          "Embedded intelligence and sensor-fusion pipelines for assisted-care environments, built for predictable behaviour.",
+      },
+    ],
+  },
+
+  stack: {
+    title: "Stack",
+    groups: [
+      { label: "ML / AI", items: ["PyTorch", "TensorFlow", "scikit-learn", "OpenCV", "LangChain", "PennyLane", "NLP"] },
+      { label: "Backend", items: ["Python", "FastAPI", "Node.js", "Express", "Django", "Flask"] },
+      { label: "Frontend", items: ["React", "Next.js", "TypeScript"] },
+      { label: "Infra & testing", items: ["Docker", "Kubernetes", "GitHub CI/CD", "AWS", "Playwright", "pytest", "Locust"] },
+      { label: "Data", items: ["PostgreSQL", "MySQL", "MongoDB", "Vector DBs"] },
+    ],
+  },
+};
+
+const about = {
   label: "About",
   title: "About me",
-  description: `${person.name} — Robotics Systems Engineer from ${person.location}`,
+  description: `${person.name}, AI/ML engineer working on LLM systems, MLOps, biosignal ML and robotics.`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -76,7 +135,8 @@ const home = {
     display: true,
   },
   calendar: {
-    display: true,
+    // Placeholder link; enable once there is a real booking page.
+    display: false,
     link: "https://cal.com",
   },
 
@@ -85,47 +145,28 @@ const home = {
     title: "Introduction",
     description: (
       <>
-        I build machines that have to exist outside the laptop.
+        I'm an AI/ML engineer who likes the part of the work that starts after the demo: the
+        evaluation, the failure analysis, the pipeline that has to run again tomorrow.
 
-        I'm an engineer interested in the intersection of software, AI, and the
-        physical world. I like working across layers, from machine learning and
-        intelligent decision-making to robotics, real-time systems, hardware, and
-        the software infrastructure that ties everything together.
+        My work sits across a few layers. On the application side I build LLM systems with
+        retrieval, verification and guardrails. On the infrastructure side I build the automated
+        testing, CI/CD and load-testing that keep ML services honest. On the research side I work
+        with EEG and fMRI signals, and on the systems side with robotics and sensor-driven
+        hardware.
 
-        A lot of my work starts with a fairly simple question:{" "}
-        <strong>
-          what happens when we take this idea out of a controlled environment
-          and make it deal with reality?
-        </strong>
+        What ties these together is one habit: <strong>measure before you believe</strong>. Models
+        get evals, not vibes. Brain-signal classifiers get subject-level splits, not shuffled
+        windows. Services get load until they break, not a single happy-path request. I write about
+        these lessons in the <a href="/blog">blog</a>.
 
-        That usually leads to interesting problems. Sensors are noisy. Hardware
-        has limitations. Models behave differently outside the dataset. Latency
-        suddenly matters. Systems fail in ways you didn't anticipate. And the
-        niche edge case you decided was probably never going to happen has a
-        strange habit of coming back to find you personally.
+        I'm currently an AI/Software Development Intern at CRIS, an MLOps & Automation Engineer
+        intern at Satorix, and co-founder at Osocius Dynamics, where we work on physical AI for
+        aging and assisted-care environments. I study Computer Science (AI & Robotics) at VIT
+        Chennai.
 
-        Sometimes that edge case is a user named <InlineCode>null</InlineCode>{" "}
-        trying to log into a facility while travelling across regions on a
-        train. Sometimes it's discovering that your carefully planned afternoon
-        has been defeated by <InlineCode>git rebase</InlineCode>. Either way,
-        reality remains undefeated.
-
-        That's the part I enjoy.
-
-        I've worked across full-stack engineering, machine learning, research,
-        robotics, and intelligent systems, and I'm increasingly focused on
-        bringing those pieces together into physical AI systems that can
-        actually be deployed. My work with Osocius Dynamics is one expression of
-        that, particularly around robotic and sensor-driven systems for aging
-        and assisted-care environments.
-
-        I care about understanding the entire system rather than becoming very
-        good at one isolated component. I like ambitious ideas, strange
-        technical problems, and building things simply to find out whether they
-        can actually work.
-
-        Prototypes are fun.{" "}
-        <strong>Making them survive contact with reality is more interesting.</strong>
+        Previously I shipped full-stack products as a freelance engineer, led engineering as a Tech
+        Lead Intern at a startup, and won hackathons along the way. I'm happiest when a vague idea
+        turns into something that runs, gets measured and survives contact with real users.
       </>
     ),
   },
@@ -135,50 +176,49 @@ const home = {
     title: "Work Experience",
     experiences: [
       {
-        company: "SatoriXR",
-        timeframe: "2026 - Present",
-        role: "Machine Learning / MLOps Engineering",
+        company: "CRIS (Centre for Railway Information Systems)",
+        timeframe: "May 2026 - Present",
+        role: "AI / Software Development Intern, New Delhi",
         achievements: [
           <>
-            Worked on machine learning infrastructure and MLOps workflows for
-            developing, deploying, and maintaining intelligent systems.
+            Built an AI-powered chatbot for the <strong>IRMARS</strong> website that gives users
+            automated, context-aware access to railway-related information.
           </>,
           <>
-            Built and improved pipelines supporting the transition from
-            experimentation and model development toward reproducible,
-            deployable ML systems.
+            Designed the chatbot's backend and conversational workflow, connecting user queries to
+            the relevant information sources to generate appropriate responses.
           </>,
           <>
-            Worked across model workflows, data processing, deployment
-            infrastructure, and engineering automation.
+            Implemented natural-language query handling and response generation in place of manual
+            information retrieval.
           </>,
           <>
-            Focused on making ML systems easier to reproduce, monitor,
-            integrate, and operate beyond the development environment.
+            Worked on API integration, backend logic and data processing to connect the chatbot to
+            the web platform, and tested responses across varied queries to improve reliability.
           </>,
         ],
         images: [],
       },
       {
-        company: "CRIS",
-        timeframe: "May 2026 - Present",
-        role: "Full-Stack Engineering",
+        company: "Satorix",
+        timeframe: "Apr 2026 - Present",
+        role: "MLOps & Automation Engineer (Intern), Hybrid, Chennai",
         achievements: [
           <>
-            Developed full-stack web applications and conversational AI
-            systems for railway information systems.
+            Identified gaps in automated validation for ML and backend workflows that were causing
+            inconsistent testing and manual verification each development cycle.
           </>,
           <>
-            Built the frontend and backend architecture connecting
-            user-facing interfaces with intelligent conversational services.
+            Designed and implemented automated test cases and validation workflows for ML services,
+            APIs and data-processing pipelines.
           </>,
           <>
-            Worked across API integration, application logic, authentication,
-            data handling, and deployment.
+            Built modular Python test suites covering functional, integration and regression
+            testing across critical system components.
           </>,
           <>
-            Designed the system to handle real-world user interactions rather
-            than functioning purely as a conversational AI prototype.
+            Developed and integrated CI/CD pipelines that run the suites on code changes, and
+            debugged pipeline failures to catch integration issues earlier.
           </>,
         ],
         images: [],
@@ -189,36 +229,57 @@ const home = {
         role: "Co-Founder | Robotics Systems Engineering",
         achievements: [
           <>
-            Co-founded a robotics engineering company developing physical AI systems 
-            for connected aging environments.
+            Co-founded a robotics engineering company developing physical AI systems for connected
+            aging environments.
           </>,
           <>
-            Designing embedded intelligence architectures that ensure predictable, 
-            safe, and consistent robotic behavior in domestic and assisted-care settings.
+            Designing embedded intelligence architectures aimed at predictable, safe and consistent
+            robotic behaviour in domestic and assisted-care settings.
           </>,
           <>
-            Developing sensor-fusion pipelines and reliability-first control systems 
-            optimized for real-world uncertainty.
+            Developing sensor-fusion pipelines and reliability-first control systems built for
+            real-world uncertainty.
+          </>,
+          <>Leading R&D in applied AI for dependable automation infrastructure.</>,
+        ],
+        images: [],
+      },
+      {
+        company: "Freelance",
+        timeframe: "Sep 2024 - Jul 2025",
+        role: "Full Stack Engineer, Remote",
+        achievements: [
+          <>
+            Architected and shipped <strong>3 full-stack web apps</strong> (React, Node.js,
+            PostgreSQL) from schema design to production deployment.
           </>,
           <>
-            Leading R&D in applied AI for dependable automation infrastructure 
-            supporting aging populations.
+            Integrated <strong>Razorpay</strong> payments and <strong>AWS SES</strong>{" "}
+            notifications, and cut delivery time by 25% through reusable component libraries.
+          </>,
+          <>
+            Validated every REST API endpoint before launch with Postman and Playwright end-to-end
+            tests, with zero critical defects after release.
           </>,
         ],
         images: [],
       },
       {
         company: "ZVIA",
-        timeframe: "Feb 2024 - Oct 2024",
-        role: "Technical Lead",
+        timeframe: "May 2024 - Aug 2024",
+        role: "Tech Lead Intern, Remote (Startup)",
         achievements: [
           <>
-            Led frontend and systems architecture for collaborative educational platforms 
-            and interactive learning systems.
+            Built the server architecture and REST API layer for the startup's MVP from scratch,
+            cutting development time by 30% across 3 core modules.
           </>,
           <>
-            Managed a small engineering team, improved engineering workflows, 
-            and optimized performance across multiple applications.
+            Shipped an Excalidraw integration and task-management features in a 5-person agile team;
+            the documentation I wrote reduced ramp-up time by 30%.
+          </>,
+          <>
+            Defined the Git branching strategy and coding standards adopted team-wide, reducing
+            merge conflicts by about 50%.
           </>,
         ],
         images: [
@@ -236,8 +297,8 @@ const home = {
         role: "Operations & HR Management",
         achievements: [
           <>
-            Coordinated operations and hiring processes, improving workflow 
-            efficiency and team structure.
+            Coordinated operations and hiring processes, improving workflow efficiency and team
+            structure.
           </>,
         ],
         images: [],
@@ -250,14 +311,34 @@ const home = {
     title: "Education",
     institutions: [
       {
-        name: "Vellore Institute of Technology",
+        name: "Vellore Institute of Technology, Chennai",
         description: (
           <>
-            B.Tech in Computer Science (AI & Robotics).  
-            Focused on Machine Learning, Optimization Algorithms, 
-            Systems Programming, and Intelligent Automation.
+            B.Tech in Computer Science & Engineering (AI & Robotics), Aug 2023 to Jun 2027.
+            <br />
+            Coursework: Data Structures & Algorithms, Machine Learning, Computer Vision, Robotics,
+            Artificial Intelligence.
           </>
         ),
+      },
+    ],
+  },
+
+  awards: {
+    display: true,
+    title: "Awards & Community",
+    items: [
+      {
+        title: "Winner, HACKSTAR 2025",
+        description: <>First place at the HACKSTAR 2025 hackathon.</>,
+      },
+      {
+        title: "Top 5 College Finalist, Smart India Hackathon (Jan 2024)",
+        description: <>Selected from 100+ teams at VIT Chennai.</>,
+      },
+      {
+        title: "Social Media & Marketing Lead, GDG Chennai (Aug 2023 - May 2025)",
+        description: <>Grew event visibility and community engagement across 10+ events.</>,
       },
     ],
   },
@@ -267,28 +348,61 @@ const home = {
     title: "Technical Expertise",
     skills: [
       {
-        title: "Machine Learning & AI",
-        description: <>Applied machine learning, neural networks, computer vision, speech processing, and intelligent system development.</>,
+        title: "LLM Applications & RAG",
+        description: (
+          <>
+            Retrieval-augmented generation, multi-agent pipelines, hallucination guardrails,
+            confidence scoring and fallback design. LangChain, FastAPI and vector databases.
+          </>
+        ),
       },
       {
-        title: "AI Engineering & MLOps",
-        description: <>Model integration, inference pipelines, experimentation, Docker, deployment workflows, and production-oriented ML systems.</>,
+        title: "MLOps & Quality Engineering",
+        description: (
+          <>
+            Automated test suites for ML services and APIs, CI/CD, Docker and Kubernetes,
+            distributed load testing with Locust, performance and integration testing, and
+            reproducible deployment workflows.
+          </>
+        ),
       },
       {
-        title: "Software & Systems Engineering",
-        description: <>C++, Python, backend architecture, APIs, databases, real-time systems, and performance-focused engineering.</>,
+        title: "Machine Learning & Research",
+        description: (
+          <>
+            PyTorch, TensorFlow, scikit-learn, OpenCV and NLP. Evolutionary and swarm optimization
+            (NEAT, PSO, CMA-ES). Research in EEG cognitive-state detection and quantum variational
+            autoencoders for fMRI.
+          </>
+        ),
       },
       {
-        title: "Full-Stack Development",
-        description: <>React, Next.js, Node.js, REST APIs, PostgreSQL, authentication, and real-time applications.</>,
+        title: "Full-Stack & Backend",
+        description: (
+          <>
+            React, Next.js, Node.js, Express, Django, Flask and FastAPI. REST API design,
+            microservices, PostgreSQL, MySQL and MongoDB, S3 storage, Razorpay and AWS SES
+            integrations.
+          </>
+        ),
       },
       {
-        title: "Robotics & Physical AI",
-        description: <>ROS, sensor-driven systems, real-time decision pipelines, and applying AI to physical environments.</>,
+        title: "Test Automation",
+        description: (
+          <>
+            Playwright, Selenium, pytest and Postman. Requirement-to-test generation with Allure
+            reporting, and end-to-end validation of REST APIs.
+          </>
+        ),
       },
       {
-        title: "Research & Experimental Computing",
-        description: <>AI research, quantitative experimentation, benchmarking, and exploration of unconventional approaches to intelligent systems.</>,
+        title: "Robotics, IoT & Embedded",
+        description: (
+          <>
+            ROS, Arduino, IoT sensors and Embedded C. Sensor-fusion pipelines and real-time decision
+            systems for physical environments.
+          </>
+        ),
       },
     ],
   },
@@ -297,13 +411,13 @@ const home = {
 const blog = {
   label: "Blog",
   title: "Engineering & Research Notes",
-  description: `Deep dives into robotics systems, applied AI, optimization, and software engineering.`,
+  description: `Writing on LLM evals, RAG, MLOps, biosignal ML, agents and robotics by ${person.name}.`,
 };
 
 const work = {
   label: "Projects",
   title: "Selected Projects",
-  description: `Robotics systems, AI engines, and intelligent platforms built by ${person.name}`,
+  description: `LLM systems, ML research, test automation and full-stack products built by ${person.name}.`,
 };
 
 const gallery = {
@@ -311,76 +425,21 @@ const gallery = {
   title: "Lab & Engineering Snapshots",
   description: `A visual collection of engineering work and systems experimentation by ${person.name}`,
   images: [
-    {
-      src: "/images/gallery/img-01.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-02.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-03.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-04.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-05.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-06.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-07.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-08.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-09.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-10.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-11.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/img-12.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-13.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/img-14.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
+    { src: "/images/gallery/img-01.jpg", alt: "image", orientation: "vertical" },
+    { src: "/images/gallery/img-02.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-03.jpg", alt: "image", orientation: "vertical" },
+    { src: "/images/gallery/img-04.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-05.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-06.jpg", alt: "image", orientation: "vertical" },
+    { src: "/images/gallery/img-07.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-08.jpg", alt: "image", orientation: "vertical" },
+    { src: "/images/gallery/img-09.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-10.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-11.jpg", alt: "image", orientation: "vertical" },
+    { src: "/images/gallery/img-12.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-13.jpg", alt: "image", orientation: "horizontal" },
+    { src: "/images/gallery/img-14.jpg", alt: "image", orientation: "horizontal" },
   ],
 };
+
 export { person, social, newsletter, home, about, blog, work, gallery };

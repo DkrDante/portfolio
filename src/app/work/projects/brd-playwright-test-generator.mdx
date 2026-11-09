@@ -1,0 +1,69 @@
+---
+title: "BRD → Playwright Test Generator"
+publishedAt: "2026-06-25"
+summary: "A Next.js tool that reads business requirement documents, generates deduplicated Playwright TypeScript tests with Allure annotations, and commits them straight to GitHub."
+images: []
+team:
+  - name: "Yashvardhan Singh"
+    role: "Full Stack Developer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Project Report: BRD → Playwright Test Generator
+
+## 1. Overview
+
+A **Next.js** tool that reads **business requirement documents (BRDs)** and generates **deduplicated Playwright TypeScript tests** with **Allure** annotations, then **commits them straight to GitHub**. No copy-paste needed.
+
+**Stack:** Next.js, Playwright, TypeScript, Allure, GitHub.
+
+## 2. Problem Statement
+
+Turning a requirements document into automated tests is slow, repetitive work. A QA engineer reads the BRD, writes scenarios, translates them into test code, adds reporting metadata, and pushes the result to the repository. Along the way, near-duplicate tests creep in, and requirement-to-test traceability is lost.
+
+The goal: **shorten the path from requirement to committed, reviewable test code**, without sacrificing quality or traceability.
+
+## 3. Workflow
+
+1. **Ingest** a BRD through the web interface.
+2. **Extract** testable requirements and derive test scenarios.
+3. **Generate** Playwright tests in TypeScript.
+4. **Deduplicate** so equivalent scenarios are not generated twice.
+5. **Annotate** tests with Allure metadata for readable reports.
+6. **Commit** the generated tests to GitHub directly from the tool.
+
+### Deduplication
+
+Requirement documents often restate the same behaviour in several places, and naive generation produces redundant tests that slow suites and inflate maintenance. Deduplication keeps the output lean and reviewable.
+
+### Allure Annotations
+
+Tagging tests with Allure metadata (such as feature or story labels) preserves the link between requirement and test, which makes the final test report meaningful to non-engineers as well.
+
+### Direct GitHub Commit
+
+Pushing generated tests to the repository from within the tool removes manual copying and fits the normal review flow: the output arrives as a commit that can be inspected, reviewed and run in CI like any other change.
+
+## 4. Technology
+
+| Component       | Technology            |
+|-----------------|-----------------------|
+| Web app         | Next.js               |
+| Test framework  | Playwright            |
+| Language        | TypeScript            |
+| Reporting       | Allure                |
+| Delivery        | GitHub integration    |
+
+## 5. Challenges and Design Considerations
+
+- **Ambiguous requirements.** Generated tests are only as good as the requirement text, so human review of the output remains important.
+- **Selector and flow accuracy.** Tests that depend on application details need those details supplied or validated.
+- **Idempotency.** Re-running on an updated BRD should update or extend tests, not duplicate them.
+- **Safe commits.** Writing to a repository calls for scoped credentials and committing to a branch for review.
+
+## 6. Outcomes and Next Steps
+
+The tool turns documentation into a reviewable pull-request-ready asset, in line with a quality-engineering approach: automate the repetitive translation, keep humans on the judgment. Next steps include richer coverage mapping between requirements and tests, and support for additional frameworks.
+
+> Time-saved or coverage figures are not included here; add them if measured.

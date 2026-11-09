@@ -1,0 +1,64 @@
+---
+title: "CheckMate State — EEG-Based Cognitive State Detection for an Adaptive Chess Tutor"
+publishedAt: "2026-10-20"
+summary: "A CNN-LSTM reads EEG signals to estimate how focused (or fatigued) a player is, and an adaptive policy engine tunes chess coaching to match."
+images:
+  - "/images/projects/project-01/eegchess.png"
+team:
+  - name: "Yashvardhan Singh"
+    role: "ML Engineer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Project Report: CheckMate State
+
+## 1. Overview
+
+**CheckMate State** plugs EEG-based **cognitive state detection** into a chess tutor. A **CNN-LSTM** model reads brain signals from the player, and an **adaptive policy engine** changes how the tutor coaches depending on whether the player is focused or fried.
+
+**Stack:** PyTorch, EEG / brain-computer interface (BCI) signals, CNN-LSTM.
+
+## 2. Problem Statement
+
+Most tutoring software treats every learner the same at every moment. A strong hint helps a focused player and overwhelms a tired one; a gentle nudge bores a player who is in flow. The tutor has no idea which situation it is in because it only sees moves, not the person making them.
+
+The goal: give the tutor a **signal about the learner's mental state** and let it adapt in real time.
+
+## 3. System Architecture
+
+The system has three stages:
+
+1. **Signal acquisition:** EEG data streams from the player while they play.
+2. **State detection:** a CNN-LSTM classifies the player's cognitive state (for example, focused vs. fatigued).
+3. **Adaptive policy engine:** maps the detected state to a coaching behaviour in the chess tutor.
+
+### Why CNN-LSTM
+
+EEG is both spatial and temporal. Convolutional layers extract local patterns across channels and short time windows, and the LSTM models how those patterns evolve over time. Cognitive state is a slow-moving property, so a sequence model is a natural fit compared with classifying each window in isolation.
+
+### The Policy Engine
+
+The policy engine is deliberately separate from the classifier. The model answers "what state is the player in?" and the policy decides "what should the tutor do about it?". Keeping them apart means coaching behaviour can be tuned or replaced without retraining the model, and the model can be improved without touching tutoring logic.
+
+## 4. Technology
+
+| Component        | Technology                |
+|------------------|---------------------------|
+| Model            | PyTorch (CNN-LSTM)        |
+| Input signal     | EEG (BCI)                 |
+| Adaptation layer | Adaptive policy engine    |
+| Application      | Chess tutor               |
+
+## 5. Challenges and Design Considerations
+
+- **Noisy signals.** EEG is sensitive to movement and electrical noise, so preprocessing and artifact handling are central to the approach.
+- **Individual variation.** Brain signals differ between people and sessions; per-user calibration is a design concern.
+- **Label quality.** "Focused" and "fatigued" are fuzzy labels, so how ground truth is defined strongly affects the model.
+- **Responsiveness.** The policy should react to sustained state changes, not momentary blips, to avoid erratic coaching.
+
+## 6. Outcomes and Next Steps
+
+This project connects neuroscience signals to a concrete, interactive application. Natural next steps include broader evaluation across users and sessions, comparing adaptive vs. non-adaptive coaching on learning outcomes, and extending the idea to other tutoring domains.
+
+> Quantitative results are not listed in this report; add evaluation numbers here once they are finalized.

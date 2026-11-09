@@ -1,0 +1,53 @@
+---
+title: "RAG Fails at Retrieval, Not Generation"
+publishedAt: "2026-01-22"
+summary: "Chunking, hybrid search, reranking and query rewriting: where retrieval-augmented systems actually lose their accuracy."
+images:
+  - "/images/blogs/blog-01.png"
+tag: "Technology"
+---
+
+# RAG Fails at Retrieval, Not Generation
+
+When a RAG system gives a bad answer, the instinct is to fiddle with the prompt or upgrade the model. In my experience, the answer is usually wrong *before* the model ever sees the question: the right passage was never retrieved. The generator can only be as good as its context.
+
+### Chunking Decides What Can Be Found
+
+Embedding a document means choosing the unit of meaning. Chunks that are too small lose context ("it increased by 12%": what increased?). Chunks that are too large dilute the embedding, so one vector represents five topics and matches none well.
+
+Practical guidance:
+
+- **Chunk on structure** (headings, paragraphs, list items), not fixed character counts.
+- **Overlap modestly** so ideas spanning a boundary are not cut in half.
+- **Attach context to each chunk**: document title, section path, date. A chunk reading "Refunds take 5-7 days" is far more useful when it knows which product line it belongs to.
+- **Store the parent.** Retrieve small chunks for precision, then hand the model the surrounding section for context.
+
+### Dense Search Alone Misses Things
+
+Embeddings capture semantic similarity and are poor at exact tokens: error codes, product names, IDs, rare acronyms. Keyword search (BM25) has the opposite profile. **Hybrid retrieval** runs both and merges the rankings, commonly with reciprocal rank fusion. For domain-specific corpora full of identifiers, this is often the single biggest cheap improvement.
+
+### Retrieve Wide, Then Rerank
+
+Vector search is built for speed over a huge corpus, so its ranking is approximate. A common pattern:
+
+1. Retrieve a generous candidate set (say, top 50) quickly.
+2. Rerank with a **cross-encoder**, which reads the query and each passage together and scores relevance far more accurately than comparing precomputed vectors.
+3. Pass only the top handful to the generator.
+
+Reranking costs latency, but it lets the generator see fewer, better passages, which also lowers token cost and reduces distraction.
+
+### The Query Is Part of the Problem
+
+Users do not write good search queries. "What about the second one?" has no meaning outside the conversation. Rewrite follow-ups into standalone questions using chat history. For complex questions, decompose into sub-queries and retrieve for each. Some systems generate a hypothetical answer first and embed that (HyDE), which can bridge the vocabulary gap between question and document.
+
+### More Context Is Not Free
+
+Stuffing the context window feels safe but has costs: higher latency and spend, and models can under-use information buried in the middle of long inputs. Ranking quality matters more than quantity. Measure the effect of k directly rather than assuming bigger is better.
+
+### Measure Retrieval on Its Own
+
+Build a small set of questions with known source passages and compute **recall@k** and **MRR** for your retriever in isolation. Now each change (chunk size, hybrid weights, reranker) has a number attached. If recall@5 is poor, you know where to spend the week, and it is not the prompt.
+
+### Takeaway
+
+Treat RAG as a search system with a language model at the end, not a language model with search bolted on. Fix what the model sees first.

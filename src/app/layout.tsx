@@ -19,7 +19,7 @@ export async function generateMetadata() {
     metadataBase: new URL(`https://${baseURL}`),
     title: home.title,
     description: home.description,
-    keywords: ["Full Stack Developer", "Machine Learning", "AI", "React", "Next.js", "Portfolio", "Web Development"],
+    keywords: ["AI Engineer", "Machine Learning", "MLOps", "LLM", "RAG", "Robotics", "EEG", "Python", "PyTorch", "Portfolio"],
     authors: [{ name: person.name }],
     creator: person.name,
     publisher: person.name,
@@ -61,9 +61,6 @@ export async function generateMetadata() {
         "max-image-preview": "large",
         "max-snippet": -1,
       },
-    },
-    verification: {
-      google: "your-google-verification-code",
     },
   };
 }

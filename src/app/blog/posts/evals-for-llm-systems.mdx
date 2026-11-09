@@ -1,0 +1,61 @@
+---
+title: "Your LLM App Needs Evals Before It Needs a Better Model"
+publishedAt: "2025-12-12"
+summary: "Vibes-based testing doesn't scale. How to build an eval set, pick metrics that mean something, and use LLM judges without fooling yourself."
+images:
+  - "/images/blogs/blog-02.png"
+tag: "Technology"
+---
+
+# Your LLM App Needs Evals Before It Needs a Better Model
+
+The most common conversation in applied AI goes: "The answers got worse after we changed the prompt." "Which answers?" "...Some of them." Without a way to measure, every change is a coin flip and every regression is discovered by a user.
+
+Evals are to LLM applications what tests are to software, with one difference that makes them harder: the output is not deterministic and "correct" is often a spectrum.
+
+### Start With Failures, Not a Benchmark
+
+Public benchmarks measure general capability. Your app has a specific job, and your eval set should be a sample of *that job*. The best seed data is real: logged queries, support tickets, the cases where a human had to step in. Start with 30 to 50 examples you actually care about and grow from there. Every production bug becomes a new test case.
+
+Make the set deliberately uneven. Include easy cases (to catch breakage), hard cases (to measure progress), and adversarial ones (out-of-scope questions, ambiguous input, prompt injection attempts).
+
+### Decompose the System, Then Measure Each Part
+
+An end-to-end score tells you something is wrong, not where. For a RAG system, split the evaluation:
+
+- **Retrieval:** did the right passage appear in the top-k? (recall@k, MRR)
+- **Faithfulness:** is each claim in the answer supported by the retrieved text?
+- **Answer quality:** does it actually address the question?
+
+If retrieval recall is 60%, no amount of prompt engineering will push answer quality past it. Component metrics point you at the real bottleneck.
+
+### Prefer Checks You Can Compute
+
+Order your metrics by how much you can trust them:
+
+1. **Deterministic checks:** valid JSON, schema conformance, required fields, exact-match on extracted values, tool-call arguments.
+2. **Reference-based checks:** comparison against known-good answers.
+3. **LLM-as-judge:** for properties that need judgment, such as tone, helpfulness and faithfulness.
+
+Use the cheapest, most objective tier that captures the property. Judges are powerful but they are a model too.
+
+### Using LLM Judges Without Fooling Yourself
+
+Judges have known biases: they favour longer answers, favour their own style, and can be swayed by position when comparing two outputs. Mitigations that actually help:
+
+- **Narrow rubrics.** "Is every claim supported by the passage? Yes/No, then quote the unsupported claim" beats "rate quality 1-10."
+- **Randomize order** in pairwise comparisons, or run both orders.
+- **Calibrate against humans.** Hand-label a sample, measure judge agreement, and recheck periodically. An unvalidated judge is an opinion generator.
+- **Keep the judge separate** from the generator where possible.
+
+### Variance Is Part of the Result
+
+With sampling, one run is one draw. A 2-point improvement on 40 examples is usually noise. Run multiple seeds, report intervals, and be suspicious of small wins. Pin temperature for evals when you want to isolate prompt changes.
+
+### Make It Boring and Automatic
+
+The goal is a command that prints a table. Run it in CI on every prompt, model or retrieval change, and fail the build on regression in the cases you marked as must-pass. Version your eval set alongside your prompts so you can explain why a number moved.
+
+### The Payoff
+
+Once evals exist, decisions get easier: is the cheaper model good enough? Does the new chunking help? Did the guardrail cost us recall? You stop debating and start measuring. Most "we need a better model" problems turn out to be "we cannot see what is failing" problems.
