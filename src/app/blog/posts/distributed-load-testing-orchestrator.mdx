@@ -1,0 +1,49 @@
+---
+title: "Finding a Service's Breaking Point: A Distributed Load-Testing Orchestrator"
+publishedAt: "2026-05-20"
+summary: "Containerized Locust workers on Kubernetes, non-uniform traffic, and a closed-loop controller that finds where an API breaks without manual tuning."
+images:
+  - "/images/blogs/blog-01.png"
+tag: "Engineering"
+---
+
+# Finding a Service's Breaking Point: A Distributed Load-Testing Orchestrator
+
+"How many users can it handle?" is the question every backend eventually faces, and the usual way of answering it is tedious: pick a number, run a test, squint at the graphs, pick a different number, repeat. This project automates that loop.
+
+It is an orchestrator built with **Python, Docker, Kubernetes and Locust** that spins up distributed load generators and then *steers* them toward the point where a service starts to fail.
+
+### Why One Machine Isn't Enough
+
+A single load generator hits its own limits (CPU, network, ephemeral ports) long before a healthy backend does, so you end up measuring your laptop instead of your service. The fix is horizontal: run many workers.
+
+The orchestrator **launches containerized Locust worker nodes across a Kubernetes cluster**, so capacity scales by adding pods rather than by finding a bigger machine. Kubernetes handles scheduling and restarts; the orchestrator handles the experiment.
+
+### Real Traffic Isn't Uniform
+
+A flat 500 requests per second is not what production looks like. Real traffic comes in bursts, ramps, lulls and mixed endpoints. Testing with a metronome tends to miss the failures that matter, such as queue build-up during a burst or a cache that behaves differently when cold.
+
+So the workers simulate **realistic, non-uniform traffic patterns** across backend APIs: varying rates and mixed request types, rather than a single steady stream.
+
+### The Closed-Loop Controller
+
+The most interesting piece is the controller. Instead of a human choosing load levels, it **adjusts the request rate from live latency and error-rate feedback**:
+
+1. Start at a modest rate.
+2. Measure latency percentiles and error rate over a window.
+3. If the service is healthy, increase the rate.
+4. If latency or errors cross a threshold, back off and narrow in.
+5. Converge on the highest rate the service sustains, which is its **breaking point.**
+
+It is the same idea as a thermostat or a congestion-control algorithm: measure, compare to a target, adjust. The result is that the breaking point **surfaces automatically, without manual tuning.**
+
+### Things That Bite
+
+- **Control-loop stability.** Reacting too hard to one noisy window makes the rate oscillate. Smoothing and sensible step sizes matter.
+- **Measure the right signal.** Averages hide pain; tail latency (p95/p99) and error rate are what the controller should react to.
+- **Coordinated omission.** If workers wait for slow responses before sending the next request, they quietly under-report latency. Worth designing around from the start.
+- **Isolate the test environment.** A load tool that can find a breaking point can also cause one. Point it at staging, not production.
+
+### Why Build It
+
+Load testing is usually an event: someone runs it before a launch. Turning it into an automated, repeatable experiment means it can run in CI and catch performance regressions the same way unit tests catch logic regressions. That fits the quality-engineering mindset I care about: make the expensive, manual check cheap enough to run every time.

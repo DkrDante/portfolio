@@ -1,0 +1,68 @@
+---
+title: "Why Your EEG Model's 95% Accuracy Is Probably a Lie"
+publishedAt: "2026-04-14"
+summary: "Subject-level splits, temporal leakage and small-sample statistics: how biosignal ML (EEG, fMRI) goes wrong and how to evaluate it honestly."
+images:
+  - "/images/blogs/blog-01.png"
+tag: "Technology"
+---
+
+# Why Your EEG Model's 95% Accuracy Is Probably a Lie
+
+Working with EEG and fMRI taught me a humbling lesson: it is remarkably easy to build a model that scores brilliantly in a notebook and fails on the next person who puts on the headset. The cause is almost never the architecture. It is the evaluation.
+
+### The Classic Mistake: Splitting Windows, Not People
+
+An EEG recording is cut into thousands of short windows. If you shuffle all windows and split 80/20, windows from the same session, a few seconds apart, land in both train and test. They are nearly identical, so the model can score well by **recognizing the individual and the session**, not the cognitive state.
+
+The fix is to split by the unit you want to generalize across:
+
+- **Subject-independent evaluation:** leave-one-subject-out or grouped k-fold, so no participant appears in both sets. This answers "does it work on a new person?"
+- **Session-aware splits** if sessions differ (electrode placement, impedance, time of day).
+- **Temporal splits** for anything time-ordered: train on earlier data, test on later.
+
+Expect the honest number to be much lower than the leaky one. That gap is the finding.
+
+### Leakage Hides in Preprocessing
+
+Anything that learns from data must be fit on training data only:
+
+- Normalization statistics (mean/std per channel).
+- PCA or any dimensionality reduction.
+- Feature selection.
+- Artifact-removal components learned from the data (such as ICA).
+
+Fitting these on the full dataset before splitting quietly leaks test information. Put preprocessing inside the cross-validation loop, for instance with a pipeline object.
+
+### The Cross-Subject Problem Is Real
+
+Brain signals vary between people (anatomy, skull thickness, baseline rhythms) and between sessions of the same person (electrode contact, fatigue, mood). A model trained on some subjects often degrades on others. Approaches that help:
+
+- **Per-user baseline normalization:** express signals relative to the person's resting state.
+- **Short calibration sessions** to adapt a pretrained model.
+- **Domain adaptation** and augmentation to reduce subject-specific features.
+- **Frequency-band features** (theta, alpha, beta power) that have established physiological meaning and tend to be more stable than raw waveforms.
+
+### Small Samples, Big Variance
+
+Clinical and lab datasets often have tens of subjects, and in neuroimaging the feature count (voxels, connectivity edges) dwarfs the sample count. This is a recipe for overfitting. Consequences:
+
+- Report **confidence intervals** or per-fold spread, not just a mean.
+- Prefer **strong simple baselines** (regularized linear models, PCA plus SVM) and require new methods to beat them under the same splits.
+- Be careful with **nested cross-validation** when tuning hyperparameters, so the tuning set is never the reporting set.
+- Check class balance and use appropriate metrics (balanced accuracy, AUC) rather than raw accuracy.
+
+### Sanity Checks That Catch Leakage
+
+- **Shuffle the labels.** Performance should collapse to chance. If it does not, something leaks.
+- **Train on one subject, test on another.** Look at the drop.
+- **Inspect what the model uses.** If saliency points to edge channels or artifacts (eye blinks, muscle noise) rather than physiologically plausible regions, suspect a shortcut.
+- **Confound check:** is the label correlated with recording day, device, or site?
+
+### The Label Problem
+
+"Focused" and "fatigued" are not ground truth; they are proxies from task performance or self-report. Noisy labels cap achievable accuracy and can encode the experimental design instead of the brain state. Document how labels were produced and treat them as a limitation.
+
+### Takeaway
+
+In biosignal ML, a believable number is one that survived subject-level splits, leak-free preprocessing and a baseline comparison. A lower honest score is worth more than a high one you cannot reproduce on a new person.

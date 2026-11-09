@@ -1,0 +1,49 @@
+---
+title: "A Multi-Agent RAG Chatbot That Admits When It Doesn't Know"
+publishedAt: "2026-02-19"
+summary: "Separating retrieval, generation and fact-verification into distinct agents, plus a confidence layer that asks for clarification instead of guessing."
+images:
+  - "/images/blogs/blog-02.png"
+tag: "Technology"
+---
+
+# A Multi-Agent RAG Chatbot That Admits When It Doesn't Know
+
+Retrieval-augmented generation fixes the "model has never seen your data" problem and then introduces a subtler one: the model now sounds *more* authoritative while still being capable of making things up. A confident wrong answer with a citation-shaped aura is worse than an honest "I'm not sure."
+
+This project, built with **Python, LangChain, FastAPI and a vector database**, is about making a chatbot that knows the difference.
+
+### The Core Idea: Don't Let One Model Grade Its Own Homework
+
+A basic RAG bot has one model doing everything: interpret the question, use the retrieved text, write the answer. If it hallucinates, nothing is positioned to notice.
+
+So the pipeline is split into three roles:
+
+1. **Retriever agent:** turns the user's question into a search, pulls the most relevant passages from the vector store, and returns them with their sources.
+2. **Generator agent:** writes an answer using only the retrieved passages as its evidence.
+3. **Verifier agent:** a separate pass that cross-checks every claim in the draft answer against the retrieved passages **before anything reaches the user.**
+
+The verifier is the important part. It has a narrow job (is this statement supported by this text?) and no incentive to be fluent or helpful. Narrow, adversarial jobs are exactly what models are better at than open-ended ones.
+
+### Confidence Scoring and the Fallback Path
+
+Verification produces a signal, and the system uses it:
+
+- **Well-supported answers** go through.
+- **Weakly supported or partially supported answers** are not shipped as-is.
+- **Low-confidence responses are routed to a clarification prompt** instead. Rather than guess, the bot asks something like "Do you mean X or Y?" or says plainly that it could not find support in its sources.
+
+This turns a failure mode (a confident wrong answer) into a conversation (a clarifying question). In domain-specific queries, where a plausible-sounding guess is most dangerous, that trade is the whole point: fewer unsupported answers, at the cost of occasionally asking the user for one more detail.
+
+### Engineering Notes
+
+- **FastAPI** exposes the pipeline as a service, with each agent as a clearly separated step so it can be tested on its own.
+- **Retrieval quality is the ceiling.** If the right passage is not retrieved, no verifier can save the answer. Chunking strategy and retrieval testing deserve more time than prompt tweaking.
+- **Test the verifier like a unit.** Feed it supported and unsupported claim pairs and check that it separates them. A guardrail you have not tested is a guess.
+- **Make "I don't know" a first-class output**, not an error path.
+
+### Trade-offs
+
+Extra agents mean extra latency and cost per query. That is a real cost, and worth paying only where wrong answers matter. For casual chat, a single pass is fine. For answers people may act on, the verifier earns its keep.
+
+The takeaway I keep returning to: reliability in LLM systems comes less from a smarter model and more from **architecture that makes the model check its work.**

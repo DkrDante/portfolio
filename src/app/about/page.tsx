@@ -62,6 +62,11 @@ export default function About() {
       items: about.studies.institutions.map((institution) => institution.name),
     },
     {
+      title: about.awards.title,
+      display: about.awards.display,
+      items: about.awards.items.map((item) => item.title),
+    },
+    {
       title: about.technical.title,
       display: about.technical.display,
       items: about.technical.skills.map((skill) => skill.title),
@@ -80,7 +85,7 @@ export default function About() {
             jobTitle: person.role,
             description: about.intro.description,
             url: `https://${baseURL}/about`,
-            image: `${baseURL}/images/${person.avatar}`,
+            image: `https://${baseURL}${person.avatar}`,
             sameAs: social
               .filter((item) => item.link && !item.link.startsWith("mailto:")) // Filter out empty links and email links
               .map((item) => item.link),
@@ -284,6 +289,26 @@ export default function About() {
                     </Text>
                     <Text variant="heading-default-xs" onBackground="neutral-weak">
                       {institution.description}
+                    </Text>
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+
+          {about.awards.display && (
+            <>
+              <Heading as="h2" id={about.awards.title} variant="display-strong-s" marginBottom="m">
+                {about.awards.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {about.awards.items.map((item, index) => (
+                  <Column key={`${item.title}-${index}`} fillWidth gap="4">
+                    <Text id={item.title} variant="heading-strong-l">
+                      {item.title}
+                    </Text>
+                    <Text variant="body-default-m" onBackground="neutral-weak">
+                      {item.description}
                     </Text>
                   </Column>
                 ))}

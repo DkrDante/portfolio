@@ -1,0 +1,68 @@
+---
+title: "JamWave — Real-Time Cross-Platform Music Sync"
+publishedAt: "2026-08-10"
+summary: "Friends on different streaming services hear the same beat at the same time, using a conductor-not-streamer design, WebSocket coordination, NTP-style clock calibration and ISRC track matching."
+images: []
+team:
+  - name: "Yashvardhan Singh"
+    role: "Full Stack Developer"
+    avatar: "/images/avatar-01.jpeg"
+    linkedIn: "https://www.linkedin.com/in/dkrdante/"
+---
+
+# Project Report: JamWave
+
+## 1. Overview
+
+**JamWave** is a real-time, cross-platform music sync system. Friends who use *different* streaming services can listen to the same track at the same moment.
+
+**Stack:** Node.js, WebSockets, system design.
+
+## 2. Problem Statement
+
+Listening together is easy when everyone is on the same platform and painful when they are not. Each service has its own catalog, player, and latency, so "press play now" produces a smeared, out-of-sync mess.
+
+Two distinct problems need solving:
+
+1. **Identity:** is Friend A's version of the song the same recording as Friend B's?
+2. **Time:** how do we get every device to be at the same position in the song at the same moment?
+
+## 3. Design
+
+### Conductor, Not Streamer
+
+JamWave never streams audio. Each listener keeps playing through their *own* service. JamWave acts only as a **conductor**: it coordinates *what* to play and *when*. This sidesteps licensing and audio-pipeline problems entirely and keeps the system lightweight, because only small control messages cross the wire.
+
+### WebSocket Playback Coordination
+
+A persistent **WebSocket** connection to each participant lets the server broadcast play, pause, seek and track-change events with low latency and push them to everyone in a session.
+
+### NTP-Style Clock Calibration
+
+Devices disagree about what time it is, and network delay differs per client. To schedule "start playing at time T" meaningfully, each client estimates its offset from the server clock using an **NTP-style exchange** of timestamps, measuring round-trip time and deriving the clock offset. Playback commands carry a target time in the shared timeline, and each client converts it to its local clock.
+
+### ISRC-Based Track Matching
+
+Different services use different track IDs, but recordings share an **ISRC** (International Standard Recording Code). JamWave resolves a track to its ISRC and uses it to find the equivalent recording on each listener's service, so everyone plays the same recording rather than a cover, remix or alternate version.
+
+## 4. Technology
+
+| Concern              | Approach                         |
+|----------------------|----------------------------------|
+| Server / transport   | Node.js, WebSockets              |
+| Time synchronization | NTP-style clock calibration      |
+| Cross-service match  | ISRC lookup                      |
+| Architecture         | Conductor (control-plane only)   |
+
+## 5. Challenges and Design Considerations
+
+- **Variable start-up latency.** Different players take different amounts of time to begin playback after a command, so calibration and scheduling must account for it.
+- **Drift.** Even a good initial sync can drift, so ongoing correction matters for long sessions.
+- **Catalog gaps.** A track may be missing on one service, so the system needs a defined fallback.
+- **Reconnection.** A client that drops and rejoins must resynchronize to the session's current position.
+
+## 6. Outcomes and Next Steps
+
+JamWave shows that useful real-time products can come from careful coordination rather than heavy infrastructure. Next steps include more streaming-service integrations, drift correction improvements, and richer session features.
+
+> Measured sync accuracy is not stated in this report; add benchmark numbers here once measured.

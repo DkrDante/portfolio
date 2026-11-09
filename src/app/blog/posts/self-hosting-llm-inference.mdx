@@ -1,0 +1,59 @@
+---
+title: "Self-Hosting LLMs: What Actually Determines Your Throughput"
+publishedAt: "2026-03-16"
+summary: "KV cache, batching, quantization and memory bandwidth: the mental model behind running models locally with Ollama or vLLM."
+images:
+  - "/images/blogs/blog-02.png"
+tag: "Engineering"
+---
+
+# Self-Hosting LLMs: What Actually Determines Your Throughput
+
+I like self-hosted stacks: they are private, controllable and educational. But running a model yourself quickly shows that "it fits in memory" and "it serves well" are very different statements. A few ideas explain most of the behaviour.
+
+### Two Phases, Two Bottlenecks
+
+LLM inference has distinct phases:
+
+- **Prefill:** process the whole prompt in parallel. This is **compute-bound**; large matrix multiplies keep the GPU busy.
+- **Decode:** generate one token at a time. Each step must read all the model weights (plus the cache) from memory to produce a single token, so it is **memory-bandwidth-bound**.
+
+This is why tokens per second depends heavily on memory bandwidth, and why a bigger model is slower at decode roughly in proportion to its size in bytes.
+
+### The KV Cache Is the Hidden Memory Bill
+
+During generation, the model caches the attention keys and values of every previous token so it does not recompute them. That cache grows with sequence length, batch size, layer count and hidden size. For long contexts or many concurrent users, **the KV cache can rival or exceed the weights in memory.** Sizing a deployment by model weights alone is the classic mistake.
+
+Ways to tame it: grouped-query attention (built into many modern models), cache quantization, shorter contexts, and paged allocation.
+
+### Why Batching Changes Everything
+
+At decode, one request barely uses the GPU's compute because the weight-read cost is the same whether you serve one sequence or many. So serving several requests together amortizes that cost: throughput rises sharply with batch size while per-request latency rises modestly.
+
+Naive static batching wastes capacity because short requests wait on long ones. **Continuous batching** inserts new requests into the running batch as others finish. Combined with **paged attention** (managing the KV cache in blocks to avoid fragmentation), this is the core idea behind servers like vLLM and is why they outperform a simple loop around a model by a wide margin under concurrent load.
+
+### Quantization: Trading Precision for Fit and Speed
+
+Storing weights in 8-bit or 4-bit instead of 16-bit shrinks memory and, because decode is bandwidth-bound, can speed it up too. The cost is some accuracy loss that varies by method and model. Rules of thumb:
+
+- 8-bit is typically very close to full precision.
+- 4-bit is often a good trade for local use but should be **checked on your task**, especially for reasoning, code and non-English text.
+- Evaluate with your own prompts rather than trusting a headline perplexity number.
+
+### Latency Has More Than One Number
+
+Report **time to first token** (driven by prefill and queueing) separately from **inter-token latency** (decode speed). A chat UI feels responsive with a fast first token; a batch job only cares about total throughput. Optimizing for the wrong one is easy.
+
+### Ollama or vLLM?
+
+Roughly: Ollama is excellent for single-user local use and quick experimentation. A server built around continuous batching and paged attention suits multi-user, throughput-sensitive serving on GPUs. Pick by workload: one person chatting, or fifty concurrent requests.
+
+### A Practical Checklist
+
+1. Compute weight memory from parameter count times bytes per parameter.
+2. Add the KV cache for your target context length and concurrency.
+3. Leave headroom for activations and the runtime.
+4. Benchmark with realistic prompt and output lengths, not toy ones.
+5. Measure both latency numbers and throughput under load.
+
+Understanding the memory-bound nature of decode turns most tuning from guesswork into arithmetic.

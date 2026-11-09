@@ -1,0 +1,58 @@
+---
+title: "Designing LLM Agents That Don't Fall Over"
+publishedAt: "2026-09-24"
+summary: "Structured outputs, tool design, bounded loops, state and observability: the engineering that separates agent demos from agents you can run."
+images:
+  - "/images/blogs/blog-01.png"
+tag: "Engineering"
+---
+
+# Designing LLM Agents That Don't Fall Over
+
+An agent is a loop: the model decides, calls a tool, reads the result, decides again. Demos make this look magical. Production makes it look like distributed systems with a flaky, creative component in the middle. Reliability comes from treating it that way.
+
+### Errors Compound
+
+If each step is 95% reliable, a ten-step task succeeds only about 60% of the time (0.95^10). Long chains amplify small error rates. This single fact drives most good design: **fewer steps, narrower steps, and checks between steps.**
+
+### Prefer Workflows Until You Need Agents
+
+Not every task needs open-ended autonomy. If you know the sequence (extract, validate, enrich, write), encode it as a fixed pipeline with the model filling in individual steps. Reserve true agent loops for problems where the path genuinely cannot be known in advance. A deterministic skeleton is easier to test, cheaper and more predictable.
+
+### Make Tools Easy to Use Correctly
+
+The model only sees tool names, descriptions and schemas, so tool design is prompt design:
+
+- **Clear, narrow tools** with unambiguous names beat one mega-tool with a dozen modes.
+- **Strict typed schemas** with enums and required fields; validate arguments before executing.
+- **Informative errors.** Return "date must be YYYY-MM-DD, got '5 Nov'" rather than a stack trace, so the model can self-correct.
+- **Idempotent where possible**, since retries happen. For non-idempotent actions (payments, emails), add confirmation or idempotency keys.
+- **Least privilege.** Give the agent only the permissions the task needs.
+
+### Constrain the Output
+
+Free-form text between steps is where parsing breaks. Use structured output (JSON schema or constrained decoding where available), validate it, and on failure feed the validation error back for a bounded number of retries. Never `eval` model output.
+
+### Bound the Loop
+
+Every agent needs hard limits: maximum steps, maximum tokens or cost, wall-clock timeout, and a repeated-action detector to break cycles where the model tries the same failing call forever. When a limit is hit, fail gracefully with a useful partial result or a handoff to a human.
+
+### Manage State and Context Deliberately
+
+Long runs fill the context window with stale tool output. Summarize or drop old results, keep a compact explicit **state object** (goal, completed steps, open questions) outside the raw transcript, and persist it so a crashed run can resume. Memory should be a designed component, not an accident of the transcript.
+
+### Verify Rather Than Trust
+
+Add checks that do not depend on the model's self-assessment: run the tests the agent claims pass, re-query the database to confirm the write, validate output against a schema or business rules. A separate verifier step catches many silent failures, the same principle as a fact-checking agent in RAG.
+
+### Security Is Part of the Design
+
+Anything the agent reads (web pages, emails, documents) can contain instructions. **Prompt injection** is real, so treat retrieved content as untrusted data, separate it from instructions, restrict dangerous tools, and require human approval for consequential or irreversible actions.
+
+### Observe Everything
+
+Log every step: the prompt, tool call, arguments, result, latency and cost, tied to a trace ID. You cannot debug a 14-step failure from the final answer alone. Replay traces into your **eval set**, so each real failure becomes a regression test.
+
+### Takeaway
+
+The impressive part of an agent is the model. The reliable part is everything around it: validated tools, bounded loops, explicit state, independent verification and traces. Build that scaffolding first, and the model gets to look as good as it really is.
