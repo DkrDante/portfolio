@@ -1,0 +1,100 @@
+---
+title: "Writing Tasks Frontier Models Fail At, On Purpose"
+publishedAt: "2026-11-14"
+summary: "Making a model fail is easy: be vague. Making it fail for the right reason is a craft. Where real difficulty comes from, the anti-patterns that fake it, and a workflow for authoring hard tasks."
+tag: "Frontier AI"
+---
+
+You can make any model fail. Write an ambiguous prompt, hide a requirement in a footnote, or ask for trivia nobody has written down. The solve rate drops to zero and you've learned nothing. You've also produced training data that teaches the model to guess.
+
+The hard part is writing tasks where **the model fails because the problem is hard, and a strong human expert with the same information would succeed.** That condition separates a useful hard task from a broken one.
+
+## Real difficulty vs. fake difficulty
+
+Before writing anything, separate the two.
+
+**Fake difficulty** comes from the task, not the problem:
+
+- **Ambiguity.** Two reasonable readings, only one accepted.
+- **Hidden requirements.** The grader checks something the spec never mentions.
+- **Trivia.** Success depends on recalling an obscure fact, not reasoning.
+- **Brittle grading.** The answer is right but formatted differently, ordered differently, or off by a float epsilon.
+- **Environment bugs.** A missing dependency, a flaky network call, a timeout set too tight.
+
+Every one of these lowers the solve rate. None of them teaches a skill. The worst part is that RL will *learn from them anyway*. It learns to hedge, to guess the grader's preferences, and to pattern-match on formatting.
+
+**Real difficulty** comes from the problem itself. These are the most reliable sources of difficulty for frontier models:
+
+### 1. The obvious fix is wrong
+
+Models are strong at pattern-matching to the common solution. Design tasks where the common solution fails. Examples: a bug report whose stack trace points at a symptom three layers away from the cause, or a performance problem where the visible hotspot isn't the bottleneck. The model has to investigate, not recall.
+
+### 2. Invariants that span files
+
+A change in one module breaks an assumption made in another, and nothing in the local context says so. To succeed, the model has to build a mental model of the whole system: read the callers, find the contract, and respect it. Models that edit locally fail here reliably.
+
+### 3. Long-horizon state
+
+Tasks where step 14 depends on something noticed at step 3: a configuration value read early, a constraint stated once, an intermediate result that must be carried forward exactly. Errors compound, and a single dropped detail sinks the attempt.
+
+### 4. Conflicting constraints
+
+Real engineering is trade-offs. "Make it faster, without changing the public API, without new dependencies, and keep memory under X" forces the model to hold several constraints at once. Each solution that satisfies three of the four is wrong.
+
+### 5. Verification is the hard part
+
+The model must check its own work to succeed. Examples are numerical code where the naive version passes simple cases but fails at the edges, or concurrency where the bug only shows up under specific interleavings. A model that stops at "looks right" fails. A model that writes its own test case succeeds.
+
+### 6. Under-documented, real-world systems
+
+Public tutorials cover the happy path. Real systems have legacy behavior, undocumented flags, and code that contradicts its own comments. A task set in a realistic codebase, with realistic mess, is harder than any textbook problem. It's also closer to what the model will face in deployment.
+
+## A workflow for authoring
+
+This is the loop that keeps quality high.
+
+**1. Start from something real.** The best seeds are real bugs, real incidents and real design reviews. They come with built-in plausibility and the kind of mess no one invents on purpose. Strip identifying details, keep the structure.
+
+**2. Write the reference solution first.** Before you write the prompt, solve it yourself and record how long it took and where you got stuck. If you got stuck somewhere interesting, that's probably where the model will too. If it took you five minutes, it's probably too easy.
+
+**3. Write the spec as if for a strong colleague.** Include everything a senior engineer joining the project would need, and nothing they wouldn't. Imagine handing it to a person: if they would ask a clarifying question, answer it in the spec.
+
+**4. Grade behavior, not implementation.** Tests should check *what* the solution does, not *how*. If two correct approaches exist, both must pass. (More on this in [Verifiers are the product](/blog/verifiers-are-the-product).)
+
+**5. Run it against the target model, many times.** Get a solve rate you can trust, not a single pass/fail. See [the 10–30% band](/blog/the-10-30-band-calibrating-task-difficulty) for why the number matters and how to measure it.
+
+**6. Read the failures.** This step separates good authors from prolific ones. Take five failing attempts and classify each:
+
+```text
+FAILURE TAXONOMY
+  [task]    spec ambiguous / info missing / grader wrong   -> fix the task
+  [env]     dependency, timeout, flaky tool                -> fix the environment
+  [model]   wrong hypothesis, dropped constraint,
+            didn't verify, gave up early                   -> good. this is the signal.
+```
+
+If any failures land in the first two buckets, fix them and re-run. The task is ready only when **failures are the model's fault.**
+
+**7. Get a second author to solve it blind.** An independent human who solves the task from the spec alone is the best evidence the task is fair. If they can't, find out why before shipping.
+
+## Common anti-patterns
+
+- **Difficulty through length.** A 4,000-word spec isn't harder, just noisier. Length should come from necessary context, not padding.
+- **Gotcha tasks.** "The answer is actually X because of a subtle edge case nobody would think of." If a strong human wouldn't think of it either, it's trivia.
+- **Leaking the answer.** Variable names, comments, or the test file itself give away the solution. Check what the model can see.
+- **One task, many copies.** Ten variants of the same bug with different variable names add little. Diversity of *reasoning* matters more than diversity of surface.
+- **Optimizing for the solve rate alone.** A task can land at 20% for bad reasons. The number is necessary, not sufficient.
+
+## A quick checklist before shipping
+
+```text
+[ ] reference solution passes the verifier 10/10 in a clean env
+[ ] a trivial / empty / "return input" solution fails
+[ ] a second human solved it from the spec alone
+[ ] solve rate measured with enough samples, inside the target band
+[ ] read >= 5 failures; all of them are model failures, not task failures
+[ ] no answer leakage in names, comments, fixtures, or git history
+[ ] task is original: not lifted from a public repo, tutorial, or benchmark
+```
+
+The last line matters more every year. Frontier models have read most of the public internet. If your task exists online, the model may be recalling the answer, not solving the problem. That's a topic of its own: [keeping evals uncontaminated](/blog/keeping-evals-uncontaminated).

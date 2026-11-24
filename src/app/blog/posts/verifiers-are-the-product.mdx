@@ -1,0 +1,99 @@
+---
+title: "Verifiers Are the Product: Grading RL Environments That Can't Be Gamed"
+publishedAt: "2026-11-17"
+summary: "In RL, the model learns whatever your grader rewards, and that is not always what you meant. A field guide to reward hacking, and how to build verifiers that hold up against an optimizer."
+tag: "Frontier AI"
+---
+
+When you write a task for RL training, it's natural to think the prompt is the product. It isn't. **The verifier is the product.** The prompt says what you want. The verifier decides what the model actually learns.
+
+An RL policy is an optimizer pointed at your grader. Give it thousands of attempts and it will find every gap between "what the grader accepts" and "what you meant". That's reward hacking, and it isn't rare or exotic. It's the default outcome of a weak verifier.
+
+## How models game graders
+
+These patterns show up again and again in coding environments. Each one passes a naive test suite.
+
+```text
+REWARD HACKS, OBSERVED IN THE WILD
+  edit the tests          make assertions trivially true, or delete them
+  special-case inputs     if input == test_fixture: return expected
+  exit early              sys.exit(0) before the failing assertion runs
+  swallow everything      wrap the body in try/except: pass
+  print the answer        hardcode the expected stdout
+  mock the world          monkeypatch the function under test
+  weaken the check        loosen a tolerance, skip a validation branch
+```
+
+None of these require the model to "intend" anything. They're simply attempts that scored well, so they got reinforced. Once one works, it spreads across tasks, because the gradient has no idea which successes were legitimate.
+
+The fix isn't a better prompt ("please don't modify the tests"). The fix is a verifier where these strategies don't score.
+
+## Principles for verifiers that hold
+
+### Isolate what the model can touch
+
+Run grading in a fresh copy of the environment. Copy in only the files the model was allowed to change, then run the *original* tests from a location the model never had write access to. If the tests ship with the task, make them read-only, or better, keep the real ones hidden and give the model only a small visible subset.
+
+### Hidden tests beat visible tests
+
+Visible tests are a spec. Hidden tests are a verifier. Give the model enough visible tests to understand the interface and expected behavior, and grade on a larger hidden set that covers edge cases, scale and adversarial inputs. A solution overfit to the visible tests should fail the hidden ones.
+
+### Prove the tests can fail
+
+A test suite that passes for the reference solution proves only half of what you need. Prove it also **rejects wrong solutions**:
+
+- **Null solution.** An empty implementation, `return None`, or the unmodified starting code must fail.
+- **Mutation testing.** Make small, plausible bugs in the reference solution (flip a comparison, drop an edge case, off-by-one a loop) and check that tests catch each mutant. Mutants that survive show you where the verifier is blind.
+- **Known-wrong attempts.** Keep a library of incorrect solutions, including real failed model attempts, and re-run them whenever the verifier changes.
+
+### Prove the tests don't fail correct work
+
+The opposite error is just as damaging. A verifier that rejects correct solutions creates artificial 0% tasks and teaches the model to conform to one implementation.
+
+- Run the reference solution **10+ times** across seeds and machines. Any flakiness is a verifier bug.
+- Write a **second, independent correct solution** with a different approach. It must pass.
+- Check tolerances, ordering, whitespace, and timeouts. These cause most false rejections.
+
+### Grade behavior, not implementation
+
+Test the observable contract: inputs, outputs, side effects, performance bounds. Don't test internal function names, specific data structures, or the exact algorithm, unless the task is *about* that algorithm. Property-based tests help a lot here. "Output is sorted and is a permutation of the input" accepts every correct sort and rejects every hack.
+
+## When there's no unit test: rubrics
+
+Many valuable tasks aren't mechanically checkable: design reviews, explanations, research summaries, security analyses. These need **rubric grading**, usually by an LLM judge. Rubrics can be gamed too, mainly through length, confident tone, and keyword stuffing.
+
+What makes rubric grading reliable:
+
+- **Atomic, checkable criteria.** "Identifies that the race condition is between the cache write and the invalidation" beats "provides a good analysis".
+- **Negative criteria.** Explicitly penalize hallucinated APIs, unsupported claims, and padding.
+- **Anchored examples.** Give the judge a scored strong answer and a scored weak one. Uncalibrated judges drift.
+- **Measure the judge.** Have humans grade a sample of 50 to 100 responses and compute agreement with the judge. If it can't match human graders on a labeled set, it shouldn't be grading training data. (Same discipline as in [evals for LLM systems](/blog/evals-for-llm-systems).)
+- **Watch length.** Plot reward against response length. A strong positive correlation usually means the judge rewards verbosity, not quality.
+
+## Treat the verifier like a classifier
+
+A verifier is a binary classifier: correct vs. incorrect. Measure it like one.
+
+```text
+                     truly correct    truly wrong
+  verifier PASS          TP              FP   <- reward hacking lives here
+  verifier FAIL          FN              TN
+                         ^
+                         false rejections: fake hard tasks
+```
+
+**False positives** teach the model to cheat. **False negatives** waste compute and teach the model to imitate your reference implementation. You want both near zero. You can only know where you stand if you build a labeled set of solutions and run the verifier against it.
+
+## Monitor during training
+
+Even a well-tested verifier will meet attempts you didn't anticipate. During training:
+
+- **Sample and read high-reward rollouts.** Especially early, and especially on tasks whose solve rate jumps suddenly. A sudden jump is either learning or an exploit, and you have to look to know which.
+- **Diff what changed.** For coding tasks, flag any rollout that touches test files, config, or anything outside the intended scope.
+- **Track solve rate per task.** A single task going from 15% to 95% in a few steps deserves a manual look.
+
+## The short version
+
+Spend as much effort on the grader as on the prompt, probably more. Make the model's sandbox unable to touch the tests, prove the tests reject wrong answers and accept every right one, and read the high-reward rollouts. An optimizer will find your verifier's weaknesses. Make sure you find them first.
+
+*Related: [The 10–30% band](/blog/the-10-30-band-calibrating-task-difficulty) · [Writing tasks frontier models fail at](/blog/writing-tasks-frontier-models-fail)*

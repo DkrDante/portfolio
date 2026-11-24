@@ -48,11 +48,6 @@ const social = [
     link: "https://dev.to/dkrdante",
   },
   {
-    name: "Osocius Dynamics",
-    icon: "globe",
-    link: "https://osodyn.in",
-  },
-  {
     name: "Email",
     icon: "email",
     link: "mailto:dkrdante@gmail.com",
@@ -69,7 +64,7 @@ const home = {
       I'm Yashvardhan, an AI/ML engineer working across <strong>LLM applications</strong>,{" "}
       <strong>MLOps and automated validation</strong>, <strong>brain-signal ML</strong> and{" "}
       <strong>robotics</strong>. Currently building conversational AI at CRIS and ML test
-      infrastructure at Satorix, and co-founding Osocius Dynamics.
+      infrastructure at Satorix.
     </>
   ),
   availability: "Open to collaborations on AI tooling, BCI and real-time systems",
@@ -145,28 +140,21 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        I'm an AI/ML engineer who likes the part of the work that starts after the demo: the
-        evaluation, the failure analysis, the pipeline that has to run again tomorrow.
-
-        My work sits across a few layers. On the application side I build LLM systems with
-        retrieval, verification and guardrails. On the infrastructure side I build the automated
-        testing, CI/CD and load-testing that keep ML services honest. On the research side I work
-        with EEG and fMRI signals, and on the systems side with robotics and sensor-driven
-        hardware.
-
-        What ties these together is one habit: <strong>measure before you believe</strong>. Models
-        get evals, not vibes. Brain-signal classifiers get subject-level splits, not shuffled
-        windows. Services get load until they break, not a single happy-path request. I write about
-        these lessons in the <a href="/blog">blog</a>.
-
-        I'm currently an AI/Software Development Intern at CRIS, an MLOps & Automation Engineer
-        intern at Satorix, and co-founder at Osocius Dynamics, where we work on physical AI for
-        aging and assisted-care environments. I study Computer Science (AI & Robotics) at VIT
-        Chennai.
-
-        Previously I shipped full-stack products as a freelance engineer, led engineering as a Tech
-        Lead Intern at a startup, and won hackathons along the way. I'm happiest when a vague idea
-        turns into something that runs, gets measured and survives contact with real users.
+        <p>
+          I'm an AI/ML engineer who likes the part of the work that starts after the demo: the evaluation, the failure analysis, the pipeline that has to run again tomorrow.
+        </p>
+        <p>
+          My work sits across a few layers. On the application side I build LLM systems with retrieval, verification and guardrails. On the infrastructure side I build the automated testing, CI/CD and load-testing that keep ML services honest. On the research side I work with EEG and fMRI signals, and on the systems side with robotics and sensor-driven hardware.
+        </p>
+        <p>
+          What ties these together is one habit: <strong>measure before you believe</strong>. Models get evals, not vibes. Brain-signal classifiers get subject-level splits, not shuffled windows. Services get load until they break, not a single happy-path request. I write about these lessons in the <a href="/blog">blog</a>.
+        </p>
+        <p>
+          I'm currently an AI/Software Development Intern at CRIS and an MLOps & Automation Engineer intern at Satorix. I study Computer Science (AI & Robotics) at VIT Chennai.
+        </p>
+        <p>
+          Previously I shipped full-stack products as a freelance engineer, led engineering as a Tech Lead Intern at a startup, and won hackathons along the way. I'm happiest when a vague idea turns into something that runs, gets measured and survives contact with real users.
+        </p>
       </>
     ),
   },
@@ -220,27 +208,6 @@ const about = {
             Developed and integrated CI/CD pipelines that run the suites on code changes, and
             debugged pipeline failures to catch integration issues earlier.
           </>,
-        ],
-        images: [],
-      },
-      {
-        company: "Osocius Dynamics",
-        timeframe: "2025 - Present",
-        role: "Co-Founder | Robotics Systems Engineering",
-        achievements: [
-          <>
-            Co-founded a robotics engineering company developing physical AI systems for connected
-            aging environments.
-          </>,
-          <>
-            Designing embedded intelligence architectures aimed at predictable, safe and consistent
-            robotic behaviour in domestic and assisted-care settings.
-          </>,
-          <>
-            Developing sensor-fusion pipelines and reliability-first control systems built for
-            real-world uncertainty.
-          </>,
-          <>Leading R&D in applied AI for dependable automation infrastructure.</>,
         ],
         images: [],
       },

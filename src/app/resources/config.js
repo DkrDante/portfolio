@@ -14,25 +14,25 @@ const protectedRoutes = {};
 
 const style = {
   theme: "dark", // dark | light
-  neutral: "slate", // sand | gray | slate
-  brand: "cyan", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  accent: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  neutral: "custom", // sand | gray | slate | custom (see terminal.scss)
+  brand: "custom", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+  accent: "custom", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
   solid: "color", // color | contrast
   solidStyle: "flat", // flat | plastic
   border: "conservative", // rounded | playful | conservative
-  surface: "translucent", // filled | translucent
+  surface: "filled", // filled | translucent
   transition: "all", // all | micro | macro
 };
 
 const effects = {
   mask: {
-    cursor: true,
+    cursor: false,
     x: 0,
     y: 0,
     radius: 35,
   },
   gradient: {
-    display: true,
+    display: false,
     x: 50,
     y: 0,
     width: 100,
@@ -43,7 +43,7 @@ const effects = {
     opacity: 30, // Reduced opacity for subtlety
   },
   dots: {
-    display: true,
+    display: false,
     size: 1, // Smaller dots for elegance
     color: "brand-on-background-weak",
     opacity: 15, // Lower opacity for subtlety
@@ -56,7 +56,7 @@ const effects = {
   grid: {
     display: true, // Enable grid for more visual interest
     color: "neutral-alpha-weak",
-    opacity: 30, // Low opacity for subtle background
+    opacity: 20, // faint graph-paper grid
   },
 };
 

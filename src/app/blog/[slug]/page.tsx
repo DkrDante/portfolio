@@ -103,9 +103,10 @@ export default function Blog({ params }: BlogParams) {
       <Heading variant="display-strong-s">{post.metadata.title}</Heading>
       <Row gap="12" vertical="center">
         {avatars.length > 0 && <AvatarGroup size="s" avatars={avatars} />}
-        <Text variant="body-default-s" onBackground="neutral-weak">
-          {formatDate(post.metadata.publishedAt)}
-        </Text>
+        <span className="t-caps t-dim">
+          {formatDate(post.metadata.publishedAt)} · {Math.max(1, Math.round(post.content.split(/\s+/).length / 220))} min read
+          {post.metadata.tag && <> · <span className="t-lime">{post.metadata.tag}</span></>}
+        </span>
       </Row>
       <Column as="article" fillWidth>
         <CustomMDX source={post.content} />
