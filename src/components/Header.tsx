@@ -1,17 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Fade, Flex, Line, ToggleButton } from "@/once-ui/components";
 import styles from "@/components/Header.module.scss";
 
 import { routes, display } from "@/app/resources";
-import { person, home, about, blog, work, gallery } from "@/app/resources/content";
+import { person, about, blog, work, social } from "@/app/resources/content";
+
+const contactHref = social.find((s) => s.icon === "email")?.link ?? "/about";
 
 type TimeDisplayProps = {
   timeZone: string;
-  locale?: string; // Optionally allow locale, defaulting to 'en-GB'
+  locale?: string;
 };
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" }) => {
@@ -19,7 +21,6 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
       const options: Intl.DateTimeFormatOptions = {
         timeZone,
         hour: "2-digit",
@@ -27,13 +28,11 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
         second: "2-digit",
         hour12: false,
       };
-      const timeString = new Intl.DateTimeFormat(locale, options).format(now);
-      setCurrentTime(timeString);
+      setCurrentTime(new Intl.DateTimeFormat(locale, options).format(new Date()));
     };
 
     updateTime();
     const intervalId = setInterval(updateTime, 1000);
-
     return () => clearInterval(intervalId);
   }, [timeZone, locale]);
 
@@ -42,105 +41,53 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
 
 export default TimeDisplay;
 
+const links = [
+  { href: "/about", label: about.label, show: routes["/about"], match: (p: string) => p === "/about" },
+  { href: "/work", label: work.label, show: routes["/work"], match: (p: string) => p.startsWith("/work") },
+  { href: "/blog", label: blog.label, show: routes["/blog"], match: (p: string) => p.startsWith("/blog") },
+].filter((l) => l.show);
+
 export const Header = () => {
   const pathname = usePathname() ?? "";
 
   return (
-    <>
-      <Fade hide="s" fillWidth position="fixed" height="80" zIndex={9} />
-      <Fade show="s" fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9} />
-      <Flex
-        fitHeight
-        className={styles.position}
-        as="header"
-        zIndex={9}
-        fillWidth
-        padding="8"
-        horizontal="center"
-      >
-        <Flex paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Flex hide="s">{person.location}</Flex>}
-        </Flex>
-        <Flex fillWidth horizontal="center">
-          <Flex
-            background="surface"
-            border="neutral-medium"
-            radius="m-4"
-            shadow="l"
-            padding="4"
-            horizontal="center"
-          >
-            <Flex gap="4" vertical="center" textVariant="body-default-s">
-              {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+    <header className={styles.nav}>
+      <Link href="/" className={styles.wm} aria-label={`${person.name}, home`}>
+        <span className={styles.glyph} aria-hidden>
+          ▚
+        </span>
+        <span>~/{person.firstName.toLowerCase()}</span>
+      </Link>
+      <span className={`t-rule ${styles.rule}`} aria-hidden />
+      <nav className={styles.links} aria-label="Primary">
+        <ul>
+          {links.map((l, i) => (
+            <li key={l.href}>
+              {i > 0 && (
+                <span className={styles.sep} aria-hidden>
+                  ·
+                </span>
               )}
-              <Line vert maxHeight="24" />
-              {routes["/about"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="person"
-                    href="/about"
-                    label={about.label}
-                    selected={pathname === "/about"}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="person"
-                    href="/about"
-                    selected={pathname === "/about"}
-                  />
-                </>
-              )}
-              {routes["/work"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="grid"
-                    href="/work"
-                    label={work.label}
-                    selected={pathname.startsWith("/work")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="grid"
-                    href="/work"
-                    selected={pathname.startsWith("/work")}
-                  />
-                </>
-              )}
-              {routes["/blog"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="book"
-                    href="/blog"
-                    label={blog.label}
-                    selected={pathname.startsWith("/blog")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="book"
-                    href="/blog"
-                    selected={pathname.startsWith("/blog")}
-                  />
-                </>
-              )}
-                         </Flex>
-          </Flex>
-        </Flex>
-        <Flex fillWidth horizontal="end" vertical="center">
-          <Flex
-            paddingRight="12"
-            horizontal="end"
-            vertical="center"
-            textVariant="body-default-s"
-            gap="20"
-          >
-            <Flex hide="s">{display.time && <TimeDisplay timeZone={person.location} />}</Flex>
-          </Flex>
-        </Flex>
-      </Flex>
-    </>
+              <Link
+                href={l.href}
+                className={l.match(pathname) ? styles.active : undefined}
+                aria-current={l.match(pathname) ? "page" : undefined}
+              >
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <span className={`t-rule ${styles.rule}`} aria-hidden />
+      {display.time && (
+        <span className={styles.time}>
+          <TimeDisplay timeZone={person.location} /> IST
+        </span>
+      )}
+      <a href={contactHref} className={styles.cta}>
+        Get in touch <span aria-hidden>→</span>
+      </a>
+    </header>
   );
 };

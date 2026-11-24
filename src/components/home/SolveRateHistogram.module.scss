@@ -1,0 +1,142 @@
+.fig {
+  margin: 0;
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--hair);
+  padding: 20px 24px 18px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  color: var(--bone);
+  margin-bottom: 20px;
+}
+
+.plot {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 4px;
+  height: 200px;
+}
+
+.col {
+  all: unset;
+  cursor: crosshair;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 3px;
+  height: 100%;
+}
+
+.cell,
+.empty {
+  flex: 1;
+  min-height: 0;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+
+.empty {
+  background: transparent;
+}
+
+.keep .cell {
+  background: var(--lime);
+}
+.rewrite .cell {
+  background: var(--dim);
+  opacity: 0.55;
+}
+.drop .cell {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--hair2);
+}
+
+.on .cell {
+  opacity: 1;
+}
+.on.drop .cell {
+  box-shadow: inset 0 0 0 1px var(--bone);
+}
+.on .empty {
+  background: rgba(241, 240, 236, 0.03);
+}
+.col:focus-visible {
+  outline: 1px solid var(--lime);
+  outline-offset: 2px;
+}
+
+.axis {
+  display: grid;
+  grid-template-columns: 2fr 4fr 4fr 10fr;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--bone50);
+  span:last-child {
+    text-align: right;
+  }
+}
+
+.bandMark {
+  color: var(--lime);
+  white-space: nowrap;
+}
+
+.foot {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--bone72);
+}
+
+.readout {
+  min-height: 1.5em;
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--bone50);
+  i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+  }
+}
+.lKeep {
+  background: var(--lime);
+}
+.lRewrite {
+  background: var(--dim);
+  opacity: 0.55;
+}
+.lDrop {
+  box-shadow: inset 0 0 0 1px var(--hair2);
+}
+
+@media (max-width: 640px) {
+  .fig {
+    padding: 16px;
+  }
+  .plot {
+    height: 150px;
+    gap: 2px;
+  }
+  .col {
+    gap: 2px;
+  }
+  .axis {
+    font-size: 10px;
+  }
+}

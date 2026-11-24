@@ -1,0 +1,455 @@
+/* ═══════════════ TERMINAL / EDITORIAL DESIGN LAYER ═══════════════
+   Two inks (night + bone) and lime for live things only.
+   Sits on top of Once UI: the scheme overrides feed every Once UI
+   component, and the .t-* classes power the custom sections. */
+
+:root {
+  --night: #0e0f0c;
+  --panel: #161813;
+  --panel2: #1c1e18;
+  --bone: #f1f0ec;
+  --bone72: rgba(241, 240, 236, 0.72);
+  --bone50: rgba(241, 240, 236, 0.5);
+  --bone32: rgba(241, 240, 236, 0.32);
+  --hair: rgba(241, 240, 236, 0.1);
+  --hair2: rgba(241, 240, 236, 0.16);
+  --dim: #8a8f84;
+  --ink: #111111;
+  --ink72: #504f4e;
+  --ink48: #868582;
+  --line: rgba(17, 17, 17, 0.12);
+  --line2: rgba(17, 17, 17, 0.22);
+  --olive: #3f7700;
+  --lime: #b6f23a;
+
+  --t-mono: var(--font-code), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --t-sans: var(--font-primary), system-ui, -apple-system, sans-serif;
+  --t-wm: var(--font-wordmark), var(--font-code), monospace;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* neutral: olive-tinted night → bone */
+  --scheme-neutral-100: #0e0f0c;
+  --scheme-neutral-200: #161813;
+  --scheme-neutral-300: #1c1e18;
+  --scheme-neutral-400: #2a2d25;
+  --scheme-neutral-500: #3c3f36;
+  --scheme-neutral-600: #8a8f84;
+  --scheme-neutral-700: #a3a79d;
+  --scheme-neutral-800: #c4c6be;
+  --scheme-neutral-900: #dad9d3;
+  --scheme-neutral-1000: #e8e7e2;
+  --scheme-neutral-1100: #f1f0ec;
+  --scheme-neutral-1200: #f8f7f4;
+  --scheme-neutral-600-10: #8a8f841a;
+  --scheme-neutral-600-30: #8a8f844d;
+  --scheme-neutral-600-50: #8a8f8480;
+
+  /* brand + accent: olive → lime */
+  --scheme-brand-100: #0f1405;
+  --scheme-brand-200: #1a2408;
+  --scheme-brand-300: #2b3d0c;
+  --scheme-brand-400: #3f7700;
+  --scheme-brand-500: #5e9e12;
+  --scheme-brand-600: #8bcb24;
+  --scheme-brand-700: #a3e032;
+  --scheme-brand-800: #b6f23a;
+  --scheme-brand-900: #c8f66a;
+  --scheme-brand-1000: #daf99a;
+  --scheme-brand-1100: #e9fbc4;
+  --scheme-brand-1200: #f5fde6;
+  --scheme-brand-600-10: #8bcb241a;
+  --scheme-brand-600-30: #8bcb244d;
+  --scheme-brand-600-50: #8bcb2480;
+
+  --scheme-accent-100: #0f1405;
+  --scheme-accent-200: #1a2408;
+  --scheme-accent-300: #2b3d0c;
+  --scheme-accent-400: #3f7700;
+  --scheme-accent-500: #5e9e12;
+  --scheme-accent-600: #8bcb24;
+  --scheme-accent-700: #a3e032;
+  --scheme-accent-800: #b6f23a;
+  --scheme-accent-900: #c8f66a;
+  --scheme-accent-1000: #daf99a;
+  --scheme-accent-1100: #e9fbc4;
+  --scheme-accent-1200: #f5fde6;
+  --scheme-accent-600-10: #8bcb241a;
+  --scheme-accent-600-30: #8bcb244d;
+  --scheme-accent-600-50: #8bcb2480;
+}
+
+/* solid buttons are lime with ink text, text is bone not pure white */
+[data-theme="dark"][data-brand="custom"] {
+  --page-background: var(--night);
+  --neutral-on-background-strong: var(--bone);
+  --brand-on-background-strong: var(--bone);
+  --brand-solid-strong: var(--lime);
+  --brand-solid-medium: #c8f66a;
+  --brand-on-solid-strong: var(--ink);
+  --accent-solid-strong: var(--lime);
+  --accent-solid-medium: #c8f66a;
+  --accent-on-solid-strong: var(--ink);
+  --accent-on-background-strong: var(--lime);
+}
+
+html {
+  background: var(--night);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+
+/* ═══════════════ PRIMITIVES ═══════════════ */
+.t-caps {
+  font-family: var(--t-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.t-mono {
+  font-family: var(--t-mono);
+}
+
+.t-lime {
+  color: var(--lime);
+}
+
+.t-dim {
+  color: var(--bone50);
+}
+
+/* //NN index */
+.t-idx {
+  font-family: var(--t-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--bone);
+  white-space: nowrap;
+}
+.t-idx i {
+  font-style: normal;
+  color: var(--bone50);
+}
+
+/* ASCII rule: a run of ─ that fills whatever space it gets */
+.t-rule {
+  position: relative;
+  flex: 1 1 0;
+  align-self: stretch;
+  min-width: 2ch;
+  min-height: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--bone32);
+  font-family: var(--t-mono);
+  letter-spacing: 0;
+  user-select: none;
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    content: "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
+  }
+  &.t-rule--double::before {
+    content: "════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════";
+  }
+}
+
+/* section header: //NN label ── meta, then H2 left + subcopy right */
+.t-sh {
+  width: 100%;
+}
+.t-sh-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.t-sh-meta {
+  color: var(--bone72);
+}
+.t-sh-body {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 40px;
+  align-items: end;
+}
+.t-h2 {
+  font: 500 clamp(34px, 5vw, 56px) / 1.02 var(--t-sans);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: var(--bone);
+  margin: 0;
+}
+.t-sub {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--bone72);
+  max-width: 34em;
+  margin: 0;
+  strong {
+    font-weight: 500;
+    color: var(--bone);
+  }
+}
+
+/* buttons */
+.t-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 22px;
+  background: var(--bone);
+  color: var(--night);
+  font: 500 15px/1 var(--t-sans);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  border-radius: 2px;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    box-shadow 0.15s;
+  .t-arr {
+    font-family: var(--t-mono);
+    transition: transform 0.2s var(--ease);
+  }
+  &:hover {
+    background: var(--lime);
+    color: var(--ink);
+    .t-arr {
+      transform: translateX(3px);
+    }
+  }
+}
+.t-btn--lime {
+  background: var(--lime);
+  color: var(--ink);
+  &:hover {
+    background: var(--bone);
+  }
+}
+.t-btn--ghost {
+  background: transparent;
+  color: var(--bone);
+  box-shadow: inset 0 0 0 1px var(--hair2);
+  &:hover {
+    background: transparent;
+    color: var(--bone);
+    box-shadow: inset 0 0 0 1px var(--bone);
+    .t-arr {
+      transform: translateY(2px);
+    }
+  }
+}
+
+.t-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--hair2);
+  font: 400 12px/1 var(--t-mono);
+  color: var(--bone72);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  b {
+    font-weight: 400;
+    color: var(--lime);
+    margin-right: 8px;
+  }
+}
+
+.t-cursor {
+  display: inline-block;
+  color: var(--lime);
+  animation: t-blink 1s steps(1) infinite;
+}
+@keyframes t-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* paper sheet: the one light surface on a night page */
+.t-sheet {
+  background: var(--bone);
+  color: var(--ink);
+  border-radius: 28px;
+  --bone72: var(--ink72);
+  --bone50: var(--ink48);
+  --bone32: rgba(17, 17, 17, 0.32);
+  --hair: var(--line);
+  --hair2: var(--line2);
+  .t-idx {
+    color: var(--ink);
+  }
+  .t-idx i {
+    color: var(--olive);
+  }
+  .t-h2,
+  .t-display {
+    color: var(--ink);
+  }
+  .t-sub strong {
+    color: var(--ink);
+  }
+  .t-btn {
+    background: var(--ink);
+    color: var(--bone);
+    &:hover {
+      background: var(--lime);
+      color: var(--ink);
+    }
+  }
+  .t-btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--line2);
+    &:hover {
+      box-shadow: inset 0 0 0 1px var(--ink);
+    }
+  }
+  .t-chip b {
+    color: var(--olive);
+  }
+  ::selection {
+    background: var(--ink);
+    color: var(--lime);
+  }
+}
+
+.t-display {
+  font: 500 clamp(40px, 7.4vw, 84px) / 0.98 var(--t-sans);
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.t-panel {
+  background: var(--panel);
+  border: 1px solid var(--hair);
+}
+
+/* reveal on load, staggered with --d */
+.t-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: t-rise 0.7s var(--ease) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes t-rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .t-cursor {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .t-sh-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .t-sh-top .t-sh-meta {
+    display: none;
+  }
+  .t-sheet {
+    border-radius: 20px;
+  }
+}
+
+
+/* code blocks inside posts: a terminal panel */
+article pre {
+  background: var(--panel);
+  border: 1px solid var(--hair);
+  border-left: 2px solid var(--lime);
+  padding: 16px 20px;
+  margin: 12px 0 20px;
+  overflow-x: auto;
+  font: 400 13px/1.65 var(--t-mono);
+  color: var(--bone);
+  code {
+    font: inherit;
+    background: none;
+  }
+}
+
+/* ═══════════════ CARD STACK (pages) ═══════════════ */
+.t-card {
+  position: sticky;
+  top: 68px;
+  width: 100%;
+  min-height: calc(100svh - 92px);
+  padding: 48px 56px;
+  border-radius: 28px;
+  border: 1px solid var(--hair);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
+  scroll-margin-top: 68px;
+  box-shadow: 0 -24px 60px -24px rgba(0, 0, 0, 0.75);
+  will-change: transform;
+  isolation: isolate;
+
+  /* darkens as the next card slides over */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #000;
+    opacity: var(--cover, 0);
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+.t-card--night {
+  background: var(--night);
+}
+.t-card--panel {
+  background: var(--panel);
+}
+.t-card--paper {
+  border-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .t-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+    gap: 36px;
+    min-height: calc(100svh - 76px);
+  }
+}

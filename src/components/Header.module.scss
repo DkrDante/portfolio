@@ -1,25 +1,127 @@
-.position {
-    position: sticky;
-    top: 0;
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  height: 56px;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--night);
+  border-bottom: 1px solid var(--hair);
+  color: var(--bone);
+  font: 500 12px/1 var(--t-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
-.mask {
-    pointer-events: none;
-    backdrop-filter: blur(0.5rem);
-    background: linear-gradient(to bottom, var(--page-background), var(--static-transparent));
-    mask-image: linear-gradient(rgba(0,0,0) 25%, rgba(0, 0, 0, 0) 100%);
-    mask-size: 100% 100%;
+.wm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 400 22px/1 var(--t-wm);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
 }
 
-@media (--s) {
-    .position {
-        top: auto;
-        position: fixed;
-        bottom: var(--static-space-24);
-    }
+.glyph {
+  color: var(--lime);
+  font-family: var(--t-mono);
+  font-size: 18px;
+}
 
-    .mask {
-        transform: rotate(180deg);
-        bottom: 0;
-    }
+.rule {
+  margin: 0 1ch;
+}
+
+.links ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links li {
+  display: flex;
+  align-items: center;
+}
+
+.links a {
+  display: inline-block;
+  padding: 6px 2px;
+  &:hover {
+    background: var(--bone);
+    color: var(--night);
+  }
+}
+
+.active {
+  color: var(--lime) !important;
+  &::before {
+    content: "[";
+    color: var(--bone50);
+  }
+  &::after {
+    content: "]";
+    color: var(--bone50);
+  }
+  &:hover {
+    color: var(--night) !important;
+  }
+}
+
+.sep {
+  color: var(--bone32);
+  margin: 0 1ch;
+  font-weight: 400;
+}
+
+.time {
+  color: var(--bone50);
+  margin-right: 24px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cta {
+  padding: 8px 4px;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  &:hover {
+    background: var(--lime);
+    color: var(--ink) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .time {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav {
+    padding: 0 16px;
+    height: 52px;
+  }
+  .rule,
+  .cta {
+    display: none;
+  }
+  .links {
+    margin-left: auto;
+  }
+  .wm {
+    font-size: 19px;
+  }
 }

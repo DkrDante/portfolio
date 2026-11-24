@@ -1,5 +1,6 @@
 import "@/once-ui/styles/index.scss";
 import "@/once-ui/tokens/index.scss";
+import "@/app/resources/terminal.scss";
 
 import { Analytics } from "@vercel/analytics/next";
 import classNames from "classnames";
@@ -7,9 +8,7 @@ import classNames from "classnames";
 import { Footer, Header, RouteGuard } from "@/components";
 import { baseURL, effects, style } from "@/app/resources";
 
-import { Inter } from "next/font/google";
-import { Space_Grotesk } from "next/font/google";
-import { Source_Code_Pro } from "next/font/google";
+import { Hanken_Grotesk, DM_Mono, Unica_One } from "next/font/google";
 
 import { person, home } from "@/app/resources/content";
 import { Background, Column, Flex, ToastProvider } from "@/once-ui/components";
@@ -65,27 +64,36 @@ export async function generateMetadata() {
   };
 }
 
-const primary = Inter({
+const primary = Hanken_Grotesk({
   variable: "--font-primary",
   subsets: ["latin"],
   display: "swap",
 });
 
-const secondary = Space_Grotesk({
+const secondary = Hanken_Grotesk({
   variable: "--font-secondary",
   subsets: ["latin"],
   display: "swap",
 });
 
-const tertiary = Source_Code_Pro({
+const tertiary = DM_Mono({
   variable: "--font-tertiary",
   subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
-const code = Source_Code_Pro({
+const code = DM_Mono({
   variable: "--font-code",
   subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+});
+
+const wordmark = Unica_One({
+  variable: "--font-wordmark",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -113,6 +121,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         secondary ? secondary.variable : "",
         tertiary ? tertiary.variable : "",
         code.variable,
+        wordmark.variable,
       )}
     >
       <ToastProvider>
@@ -164,7 +173,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               opacity: effects.lines.opacity as any,
             }}
           />
-          <Flex fillWidth minHeight="16"></Flex>
           <Header />
           <Flex
             position="relative"

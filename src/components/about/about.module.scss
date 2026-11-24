@@ -1,27 +1,239 @@
-.hover {
-    transition: var(--transition-micro-medium);
+.page {
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  padding-bottom: 40px;
+}
 
-    &:hover {
-        transform: translateX(var(--static-space-4));
-    }
+.hero {
+  justify-content: space-between !important;
+}
+
+.heroTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.identity {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 40px;
+  align-items: end;
 }
 
 .avatar {
-    position: sticky;
-    height: fit-content;
-    top: var(--static-space-64);
+  width: 200px;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.3s;
+  &:hover {
+    filter: none;
+  }
 }
 
-@media (--s) {
-    .avatar {
-        top: auto;
-    }
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-    .textAlign {
-        text-align: center;
-    }
+.role {
+  font-size: 19px;
+}
 
-    .blockAlign {
-        align-self: center;
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.section {
+  justify-content: flex-start !important;
+}
+
+.intro {
+  max-width: 44em;
+  font: 400 clamp(19px, 2vw, 24px) / 1.55 var(--t-sans);
+  letter-spacing: -0.01em;
+  color: var(--bone72);
+  strong {
+    color: var(--bone);
+    font-weight: 500;
+  }
+  a {
+    color: var(--lime);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--hair2);
+}
+
+.row {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--hair2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rowHead {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: baseline;
+}
+
+.n {
+  color: var(--lime);
+  font-size: 12px;
+}
+
+.rowTitle {
+  margin: 0;
+  font: 500 22px/1.2 var(--t-sans);
+  letter-spacing: -0.02em;
+  color: var(--bone);
+}
+
+.when {
+  font-size: 12px;
+  color: var(--bone50);
+  white-space: nowrap;
+}
+
+.rowRole {
+  margin: 0;
+  color: var(--lime);
+  padding-left: calc(3ch + 20px);
+}
+
+.rowText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--bone72);
+}
+
+.bullets {
+  margin: 4px 0 0;
+  padding: 0 0 0 calc(3ch + 20px);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  li {
+    position: relative;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--bone72);
+    padding-left: 22px;
+    &::before {
+      content: "├─";
+      position: absolute;
+      left: 0;
+      font-family: var(--t-mono);
+      font-size: 12px;
+      color: var(--bone32);
+      top: 0.25em;
     }
+    &:last-child::before {
+      content: "└─";
+    }
+  }
+  strong {
+    color: var(--bone);
+    font-weight: 500;
+  }
+}
+
+.shots {
+  padding-left: calc(3ch + 20px);
+  max-width: 420px;
+  margin-top: 8px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 56px;
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--hair2);
+  border-left: 1px solid var(--hair2);
+}
+
+.skill {
+  min-width: 0;
+  padding: 20px 24px 28px;
+  border-right: 1px solid var(--hair2);
+  border-bottom: 1px solid var(--hair2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background 0.2s;
+  &:hover {
+    background: var(--panel);
+  }
+}
+
+.skillTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .skills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .identity {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .avatar {
+    width: 140px;
+  }
+  .heroTop > span:last-child,
+  .heroTop :global(.t-rule) {
+    display: none;
+  }
+  .skills {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rowRole,
+  .bullets,
+  .shots {
+    padding-left: 0;
+  }
+  .rowHead {
+    grid-template-columns: 3ch minmax(0, 1fr);
+  }
+  .when {
+    grid-column: 2;
+  }
+}
+
+.intro p {
+  margin: 0 0 1em;
 }

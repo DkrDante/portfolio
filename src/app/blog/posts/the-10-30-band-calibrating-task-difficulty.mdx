@@ -1,0 +1,131 @@
+---
+title: "The 10–30% Band: Calibrating Task Difficulty for RL Training"
+publishedAt: "2026-11-10"
+summary: "A task the model always solves teaches it nothing. Neither does one it never solves. Why RL training data lives in a narrow solve-rate band, and how to measure it without fooling yourself."
+tag: "Frontier AI"
+---
+
+Here is the most useful number for a training task: **how often the target model solves it.** It matters more than the domain, the length, or how impressive the task looks. Get that number wrong and a beautifully written task contributes nothing to training.
+
+This post explains why the useful range is narrow, why it sits well below 50%, and how to estimate it without fooling yourself.
+
+## Where the gradient comes from
+
+Most modern RL fine-tuning on reasoning and coding works the same way. The model gets a task, samples several attempts, and a verifier scores each one. The update pushes up the attempts that scored above average and pushes down the ones below.
+
+GRPO-style methods make this explicit. For each task you sample a group of K rollouts and compute each rollout's advantage relative to the group:
+
+```text
+advantage_i = (reward_i - mean(rewards)) / std(rewards)
+```
+
+Now look at the two extremes.
+
+- **The model solves it every time.** Every reward is 1, the mean is 1, every advantage is 0. No gradient.
+- **The model never solves it.** Every reward is 0. Same result: no gradient.
+
+The task still costs K full rollouts of compute either way. It just teaches nothing. A pool where half the tasks sit at 0% or 100% is half wasted.
+
+## How often a group actually contains signal
+
+With binary rewards, a group of K attempts produces gradient only if it contains at least one success and at least one failure. If the model solves the task with probability p, that happens with probability:
+
+```text
+P(mixed group) = 1 - p^K - (1 - p)^K
+```
+
+With K = 16:
+
+```text
+p = 0.02  ->  0.28    (72% of groups are all-fail: wasted)
+p = 0.10  ->  0.81
+p = 0.20  ->  0.97
+p = 0.30  ->  0.997
+p = 0.50  ->  ~1.0
+p = 0.90  ->  0.81
+p = 0.98  ->  0.28
+```
+
+By this measure alone, anything from about 10% to 90% looks fine. So why aim low?
+
+## Why the band sits below the middle
+
+**1. Tasks get easier as training runs.** The model is improving on exactly the distribution you're feeding it. A task at 50% today might be at 85% a few hundred steps later. A task at 15% has a long useful life before it ages out. Calibrate for where the model is going.
+
+**2. Rare successes carry more information.** When p is low, the single success in a group gets a large positive advantage (roughly `(1 - p) / sqrt(p(1 - p))`). The model learns "this path, the one you almost never take, is the right one". That is the behavior you're trying to grow. At p = 0.5 each success is routine and the signal is spread thin.
+
+**3. Low solve rates often mark the capability frontier.** A task the model solves 20% of the time is one where the right reasoning exists in the policy but isn't dominant yet. That's the edge you want to push. A 0% task might need a capability the model doesn't have at all, and RL rarely conjures those from nothing.
+
+**4. Evals need headroom.** If the same tasks double as held-out evals, a 20% baseline leaves room to show progress. A 60% baseline saturates after one good training run.
+
+So the band is a compromise: **frequent enough that most groups contain a success, rare enough that the success means something and the task stays useful for a while.** 10–30% is a common working target. The exact edges depend on your group size, your training horizon, and how fast your model moves.
+
+## Measuring p without fooling yourself
+
+The trap is that you estimate p from a handful of attempts. With n attempts and c successes, the naive estimate is c / n, and its standard error is large:
+
+```text
+SE ~ sqrt(p(1 - p) / n)
+
+p = 0.2, n = 8   ->  SE ~ 0.14
+p = 0.2, n = 16  ->  SE ~ 0.10
+p = 0.2, n = 64  ->  SE ~ 0.05
+```
+
+At n = 8, a true 20% task can easily look like 0% or 45%. Classify a pool of 500 tasks this way and you'll throw out good ones and keep bad ones in large numbers.
+
+What works in practice:
+
+- **Use an interval, not a point estimate.** A Wilson score interval behaves well near 0 and 1, where the normal approximation breaks.
+- **Sample adaptively.** Run 8 attempts on everything. Tasks clearly inside or clearly outside the band are decided. Tasks near an edge get another 16 or 32. Most of the compute goes to the ambiguous cases.
+- **Calibrate against the exact policy and sampling settings you'll train with.** Same checkpoint, same temperature, same system prompt, same tool access. A task at 20% at temperature 1.0 can be at 45% at temperature 0.6.
+- **Re-calibrate as training progresses.** Keep a held-back slice of the pool and re-measure it at checkpoints. When tasks drift out of band, retire them.
+
+Here's the skeleton of a calibration loop:
+
+```python
+from math import sqrt
+
+def wilson(c, n, z=1.96):
+    if n == 0:
+        return 0.0, 1.0
+    p = c / n
+    denom = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / denom
+    half = z * sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denom
+    return centre - half, centre + half
+
+def calibrate(task, policy, lo=0.10, hi=0.30, budget=(8, 16, 32)):
+    c = n = 0
+    for k in budget:
+        c += sum(verify(task, policy.sample(task)) for _ in range(k))
+        n += k
+        low, high = wilson(c, n)
+        if high < lo:
+            return "too_hard", c, n   # audit the verifier before discarding
+        if low > hi:
+            return "too_easy", c, n
+        if low >= lo and high <= hi:
+            return "in_band", c, n
+    return "borderline", c, n         # decide by policy: keep, or spend more
+```
+
+## What to do with each bucket
+
+**Too easy (above the band).** Drop it, or make it harder for a real reason: add a constraint, remove a hint, extend the horizon. Don't make it harder by making it vaguer. That turns a clean task into a noisy one.
+
+**In band.** Ship it, but read three or four of the failing attempts first. If the model fails for a reason you didn't intend (it misread an ambiguous sentence, or it hit an environment bug), the solve rate is right for the wrong reason. Fix the task and re-measure.
+
+**Too hard (below the band).** This bucket needs the most care. Before deciding the task is "beyond the model", check:
+
+1. Does the reference solution actually pass the verifier, every time, in a clean environment?
+2. Is the verifier rejecting correct answers? Formatting, ordering, floating-point tolerance and timeouts are common culprits.
+3. Is the spec missing information a human expert would also need?
+
+A large share of 0% tasks are broken, not hard. The rest can often be brought into band by adding one well-placed piece of context, such as a hint about which subsystem matters. That isn't cheating. It sets where on the capability frontier the task sits.
+
+## The one-line version
+
+Calibrate every task against the policy you'll train, with enough samples to trust the number. Keep the ones it sometimes solves, and treat 0% as a bug report before you treat it as a hard task.
+
+*Related: [Writing tasks frontier models fail at, on purpose](/blog/writing-tasks-frontier-models-fail) and [Verifiers are the product](/blog/verifiers-are-the-product).*

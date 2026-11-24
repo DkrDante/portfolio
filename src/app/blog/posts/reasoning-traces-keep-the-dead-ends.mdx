@@ -1,0 +1,95 @@
+---
+title: "Reasoning Traces: Keep the Dead Ends"
+publishedAt: "2026-11-20"
+summary: "A clean, linear solution teaches a model what the answer is. A trace that shows the wrong turns teaches it how to find answers. What makes expert reasoning traces valuable training data, and how to write them."
+tag: "Frontier AI"
+---
+
+When experts write up a solution, they edit it. The false starts disappear, the hypothesis that ate an hour is cut, and what's left reads as a straight line from problem to answer. That's what you want in documentation. For training data, it's a mistake.
+
+**A clean solution teaches a model what the answer is. A trace with its dead ends teaches it how to find answers.**
+
+## Why dead ends are the valuable part
+
+Hard problems aren't solved linearly by anyone. An expert debugging a production issue forms a hypothesis, tests it, finds it doesn't explain the evidence, and moves on. The skill isn't knowing the answer up front. It's:
+
+- generating plausible hypotheses,
+- choosing a cheap test that tells them apart,
+- noticing when evidence contradicts the current theory,
+- abandoning a theory *without* abandoning what was learned from it.
+
+A polished solution contains none of this. Train on polished solutions and you get a model that writes confidently in a straight line, which works on easy problems and fails quietly on hard ones. When its first idea is wrong, it has no examples of what to do next.
+
+Traces that keep the wrong turns give the model examples of **self-correction**: the moment of "that doesn't fit, let me reconsider". That behavior is what separates models that recover from mistakes from models that just double down.
+
+## Anatomy of a good trace
+
+A good trace reads like a careful expert thinking aloud. Each step has a purpose, and abandoned paths are marked as abandoned, with the reason.
+
+```text
+TASK  API p99 latency jumped from 120ms to 900ms after Tuesday's deploy.
+
+[1] hypothesis  the deploy added a slow DB query.
+    test        compare query logs before / after.
+    result      ✗ query count and durations unchanged.
+    learned     the slowdown isn't in the DB layer.
+
+[2] hypothesis  a new dependency added startup cost to each request.
+    test        p50 vs p99 split.
+    result      ✗ p50 is flat. only the tail moved, so it's not per-request cost.
+    learned     something intermittent. GC? contention? a cache?
+
+[3] hypothesis  cache hit rate dropped.
+    test        hit-rate dashboard.
+    result      ✓ hit rate 94% -> 61% at deploy time.
+    next        why? the cache key format changed in the deploy diff:
+                keys now include a request-id field -> every key is unique.
+
+[4] verify      revert the key change on one canary host.
+    result      ✓ hit rate recovers, p99 back to ~125ms on canary.
+
+ANSWER  cache key includes a per-request field; remove it from the key.
+```
+
+Look at what steps 1 and 2 do. They aren't failures, they're **eliminations**, and each one narrows the search. The "learned" line is the most valuable line in the trace. It shows how a dead end feeds the next hypothesis.
+
+## Rules for writing traces
+
+**Don't fake dead ends.** Inventing wrong turns after the fact produces strawmen: obviously silly hypotheses nobody would consider. Models learn from that too, and what they learn is useless. Record the paths you, or a skilled colleague, actually considered. If you went straight to the answer, the task may be too easy for a trace.
+
+**Every abandoned path needs a reason.** "That didn't work" teaches nothing. "p50 is flat, so it isn't a per-request cost" teaches a reusable inference pattern.
+
+**Tests should be cheap and discriminating.** Good experts choose the check that best separates hypotheses, not the most thorough one. Traces should show that choice: why *this* check, and not another.
+
+**Mark confidence honestly.** "I think", "this suggests", and "confirmed" mean different things. A trace that is certain at every step teaches overconfidence.
+
+**End with verification, not assertion.** The final step should check the answer independently, not just restate it. "Revert on canary, observe recovery" is verification. "So the answer is the cache key" is assertion.
+
+**Keep the granularity consistent.** Too coarse ("I investigated and found the bug") skips the reasoning. Too fine ("I opened the terminal, I typed ls") buries it. Aim for one step per decision.
+
+## Checking trace quality
+
+Traces need QA like any other training data. A practical review pass:
+
+```text
+[ ] every step follows from the previous evidence
+[ ] each abandoned path has a stated reason and a "learned"
+[ ] dead ends are plausible: a skilled human might try them
+[ ] no step uses information not yet available at that point
+[ ] the final answer is verified, not just asserted
+[ ] the answer matches the ground truth
+```
+
+The fourth check catches a subtle and common bug: **hindsight leakage**. Because the author knows the answer, they may write a step that only makes sense if you already know where you're going ("let me check the cache key format"). The model learns that good reasoners jump to correct conclusions without evidence, which is exactly the wrong lesson.
+
+## Where these traces get used
+
+- **Supervised fine-tuning** on reasoning, to teach the *shape* of good search before RL.
+- **Process reward models**, where each step is labeled good, neutral or bad, so the model gets feedback mid-trajectory, not just at the end.
+- **Evaluation**, by comparing a model's trace to an expert's on the same task: did it eliminate the same hypotheses? Did it verify?
+
+## The short version
+
+Don't write up the answer. Write down the search. Keep the hypotheses that didn't pan out, say why they were dropped and what was learned, and finish by checking the result. That's the behavior you want a model to learn, so it's the behavior your data needs to show.
+
+*Related: [Writing tasks frontier models fail at](/blog/writing-tasks-frontier-models-fail) · [Verifiers are the product](/blog/verifiers-are-the-product)*
